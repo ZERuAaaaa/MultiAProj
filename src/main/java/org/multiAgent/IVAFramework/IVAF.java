@@ -10,10 +10,29 @@ public class IVAF{
 
     private ArrayList<Argument> arguments;
 
-    private ArrayList<Attack> relationship = new ArrayList<Attack>();
+    private ArrayList<Audience> audiences;
 
-    public IVAF(ArrayList<Argument> arguments){
+    private ArrayList<Attack> relationship = new ArrayList<>();
+
+    public IVAF(ArrayList<Argument> arguments, ArrayList<Audience> audiences){
         this.arguments = arguments;
+        this.audiences = audiences;
+        fitAudiences();
+        setRelationship();
+    }
+
+    public void fitAudiences(){
+        ArrayList<Argument> newArguments = new ArrayList<>();
+        for(Audience aud: audiences){
+            for(Argument arg: arguments){
+                if(aud.getAction().equals(arg.getAct())){
+                    newArguments.add(new Argument(arg.getAct(), arg.getGoal(), aud.getAudience(), aud.getSign(), aud.getVal()));
+                }
+            }
+        }
+        arguments = newArguments;
+    }
+    public void initializeIVAF(){
         setRelationship();
     }
 
@@ -31,8 +50,16 @@ public class IVAF{
                     + " ----> "
                     + attacked.getAct() + " "
                     + attacked.getAudience() + " "
-                    + (attacker.getSign().isPositive() ? "+" : "-") + " "
+                    + (attacked.getSign().isPositive() ? "+" : "-") + " "
                     + attacked.getVal());
+        }
+        ArrayList<Argument> acceptableArguments = getPreferredExtension();
+        for(Argument arg : acceptableArguments){
+            System.out.println("{" + arg.getAct()
+                    + " " + arg.getAudience()
+                    + " " + arg.getSign()
+                    + " " + arg.getVal()
+                    + "}");
         }
     }
     /**
@@ -51,22 +78,16 @@ public class IVAF{
                     // a = a', s = - and s' = +
                     if(i.getAct().equals(e.getAct()) && i.getSign().isNegative() && e.getSign().isPositive()){
                         Attack attackRelationAB = new Attack(i, e);
-                        //Attack attackRelationBA = new Attack(i, e);
                         relationship.add(attackRelationAB);
-                        //relationship.add(attackRelationBA);
                     // a = a', v != v' and s = s' = +
                     }else if(i.getAct().equals(e.getAct()) && !(i.getVal() == e.getVal()) &&
                              i.getSign().isPositive() && e.getSign().isPositive()){
                         Attack attackRelationAB = new Attack(i, e);
-                        //Attack attackRelationBA = new Attack(i, e);
                         relationship.add(attackRelationAB);
-                        //relationship.add(attackRelationBA);
                     // a != a' and s = s' = +
                     }else if(!i.getAct().equals(e.getAct()) && i.getSign().isPositive() && e.getSign().isPositive()){
                         Attack attackRelationAB = new Attack(i, e);
-                        //Attack attackRelationBA = new Attack(i, e);
                         relationship.add(attackRelationAB);
-                        //relationship.add(attackRelationBA);
                     }
                 }
             }
@@ -75,9 +96,8 @@ public class IVAF{
 
     /**
      * returns true if an argument a1 is preferred to argument a2
-     * @param a1
-     * @param a2
-     * @return
+     * @param a1 first argument
+     * @param a2 second argument
      */
     public boolean defeat(Argument a1, Argument a2){
         boolean contains = false;
@@ -95,7 +115,7 @@ public class IVAF{
     }
 
     private ArrayList<Argument> getAttackers(Argument a){
-        ArrayList<Argument> attackers = new ArrayList<Argument>();
+        ArrayList<Argument> attackers = new ArrayList<>();
         for(Attack attack: relationship){
             if(attack.getAttacked() == a){
                 attackers.add(attack.getAttacker());
@@ -145,8 +165,8 @@ public class IVAF{
                 if(!isAcceptable(a)){
                     return false;
                 }
-                return true;
             }
+            return true;
         }
 
         return false;
@@ -158,7 +178,7 @@ public class IVAF{
         if(allSubset.isEmpty()){
             return null;
         }
-        ArrayList<Argument> preferredExtension = new ArrayList<Argument>();
+        ArrayList<Argument> preferredExtension = new ArrayList<>();
         for(ArrayList<Argument> admissibleSet: allSubset){
             if(admissibleSet.size() > preferredExtension.size()){
                 preferredExtension = admissibleSet;
@@ -174,10 +194,10 @@ public class IVAF{
      * @return subsets
      */
     private ArrayList<ArrayList<Argument>> getAllSubset(ArrayList<Argument> arguments){
-        ArrayList<ArrayList<Argument>> subsets = new ArrayList<ArrayList<Argument>>();
+        ArrayList<ArrayList<Argument>> subsets = new ArrayList<>();
         int size = 1 << arguments.size();
         for(int i = 0 ; i < size ; i++){
-            ArrayList<Argument> subset = new ArrayList<Argument>();
+            ArrayList<Argument> subset = new ArrayList<>();
             for(int e = 0; e < arguments.size(); e++){
                 if((i & (1 << e))!= 0){
                     subset.add(arguments.get(e));
@@ -187,9 +207,15 @@ public class IVAF{
         }
         return subsets;
     }
+
+
+    public void insert(Argument argument){
+        arguments.add(argument);
+        setRelationship();
+    }
     /**
      * return IVAFTuple of an agent
-     * @return
+     * @return <X, A>
      */
     public Pair<ArrayList<Argument>, ArrayList<Attack>> getIVAFTuple(){
         return new Pair(arguments, relationship);

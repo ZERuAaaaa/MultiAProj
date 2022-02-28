@@ -9,23 +9,25 @@ import java.util.ArrayList;
  */
 public class Argument {
 
+        private boolean audienced = false;
         private String action;
         private String goal;
         private String audience;
-        private Double val;
+        private Integer val;
         private Sign sign;
 
-        public Argument(String action, String goal, String audience, String sign, Double val){
+        public Argument(String action, String goal){
+            this.action = action;
+            this.goal = goal;
+        }
+
+        public Argument(String action, String goal, String audience, Sign sign, Integer val){
             this.action = action;
             this.goal = goal;
             this.audience = audience;
-            switch (sign){
-                case "-": this.sign = Sign.NEGATIVE;
-                    break;
-                case "+": this.sign = Sign.POSITIVE;
-                    break;
-            }
+            this.sign = sign;
             this.val = val;
+            this.audienced = true;
         }
 
         public String toString(){
@@ -40,7 +42,7 @@ public class Argument {
             return goal;
         }
 
-        public Double getVal(){
+        public Integer getVal(){
             return val;
         }
 
@@ -51,10 +53,11 @@ public class Argument {
         public String getAudience(){
             return audience;
         }
-        public void setVal(Double val){
+
+        public void setVal(Integer val){
             this.val = val;
         }
 
-        public void setAudience(String audience){this.audience = audience;}
+        public void seted(){this.audienced = true;}
 
     }

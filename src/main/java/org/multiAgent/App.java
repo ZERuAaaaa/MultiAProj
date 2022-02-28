@@ -1,6 +1,10 @@
 package org.multiAgent;
 
 import org.multiAgent.BroadCastCommunication.Messager;
+import org.multiAgent.IVAFramework.Argument;
+import org.multiAgent.IVAFramework.IVAF;
+
+import java.util.ArrayList;
 
 /**
  * Hello world!
@@ -11,25 +15,25 @@ public class App{
     public static void main(String[] args) {
 
 
-//        Argument restaurant1 = new Argument("restaurant","go out","C", "+", 1.00);
-//        Argument restaurant2 = new Argument("restaurant","go out","D", "-", 2.00);
-//        Argument picnic1 = new Argument("picnic","go out","M", "+", 4.00);
-//        Argument picnic2 = new Argument("picnic","go out","D", "+", 2.00);
-//        Argument picnic3 = new Argument("picnic","go out","V", "-", 3.00);
-//        ArrayList<Argument> list = new ArrayList<>();
-//        list.add(restaurant1);
-//        list.add(restaurant2);
-//        list.add(picnic1);
-//        list.add(picnic2);
-//        list.add(picnic3);
-//        IVAF ivaf = new IVAF(list);
-//        ivaf.print();
-//        ArrayList<Argument> out = ivaf.getPreferredExtension();
-//        for (Argument a : out){
-//            System.out.println(a.getAct() + " " + a.getAudience());
-//        }
+        Agent agent1 = new Agent();
+        agent1.addArgument("restaurant", "go out");
+        agent1.addArgument("picnic", "go out");
+        agent1.addAudience("restaurant", "C", "+", 4);
+        agent1.addAudience("picnic", "M", "+", 1);
+        agent1.addAudience("picnic", "D", "+", 3);
+        agent1.addAudience("picnic", "C", "+", 4);
 
-        Messager messager = new Messager();
+        agent1.initializeByTopic("go out");
+        agent1.getDvaf().print();
 
+
+        Agent agent2 = new Agent();
+        agent2.addArgument("restaurant", "go out");
+        agent2.addArgument("picnic", "go out");
+        agent2.addAudience("restaurant", "D", "-", 2);
+        agent2.addAudience("picnic", "V", "-", 3);
+
+        agent2.initializeByTopic("go out");
+        agent2.getDvaf().print();
     }
 }
