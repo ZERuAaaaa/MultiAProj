@@ -13,7 +13,7 @@ public class Messager {
 
     }
 
-    public <T> void broadCast(Move move, T content){
+    public <T> void broadCast(Agent proposer, Move move, T content){
 
     }
 
@@ -24,6 +24,6 @@ public class Messager {
     }
 
     public void printLastOne(){
-        System.out.println(messageLog.get(messageLog.size()));
+        System.out.println(messageLog.get(messageLog.size() - 1));
     }
 }
