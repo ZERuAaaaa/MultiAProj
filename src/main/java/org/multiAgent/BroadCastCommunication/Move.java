@@ -1,30 +1,38 @@
 package org.multiAgent.BroadCastCommunication;
 
-public enum Move {
+import org.multiAgent.Agent;
+import org.multiAgent.DialogueSystem;
 
-    OPEN("OPEN"),ASSERT("ASSERT"),AGREE("AGREE"),CLOSE("CLOSE");
-    String move;
-    Move(String name){
-        this.move = name;
+public class Move<T> {
+
+
+    Agent sender;
+    MoveType type;
+    T content;
+    Integer timeStamp;
+
+    public Move(Agent sender, MoveType type, T content){
+        this.sender = sender;
+        this.type = type ;
+        this.content = content;
+        timeStamp = DialogueSystem.counter;
     }
 
-    public String getMove(){
-        return move;
+    public Agent getSender(){
+        return sender;
     }
 
-    public Boolean isOPEN(){
-        return this == Move.OPEN;
+    public MoveType getType(){
+        return type;
     }
 
-    public Boolean isCLOSE(){
-        return this == Move.CLOSE;
+    public T getContent(){
+        return content;
     }
 
-    public Boolean isASSERT(){
-        return this == Move.ASSERT;
-    }
-
-    public Boolean isAGREE(){
-        return this == Move.AGREE;
+    public String toString(){
+        return "<" + this.sender.getAgentId() +
+                "," + this.type.getMove() +
+                "," + this.content.toString() + ">";
     }
 }

@@ -3,61 +3,58 @@ package org.multiAgent.IVAFramework;
 
 import javafx.util.Pair;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class IVAF{
 
     private ArrayList<Argument> arguments;
 
-    private ArrayList<Audience> audiences;
+    private HashMap<String, Integer> audiences;
 
     private ArrayList<Attack> relationship = new ArrayList<>();
 
-    public IVAF(ArrayList<Argument> arguments, ArrayList<Audience> audiences){
+    public IVAF(ArrayList<Argument> arguments, HashMap<String, Integer> audiences){
         this.arguments = arguments;
         this.audiences = audiences;
-        fitAudiences();
         setRelationship();
     }
 
-    public void fitAudiences(){
-        ArrayList<Argument> newArguments = new ArrayList<>();
-        for(Audience aud: audiences){
-            for(Argument arg: arguments){
-                if(aud.getAction().equals(arg.getAct())){
-                    newArguments.add(new Argument(arg.getAct(), arg.getGoal(), aud.getAudience(), aud.getSign(), aud.getVal()));
-                }
-            }
-        }
-        arguments = newArguments;
+    public void insertArgument(Argument argument){
+        arguments.add(argument);
+        relationship.clear();
+        setRelationship();
     }
+
     public void initializeIVAF(){
         setRelationship();
     }
 
     public void print(){
         for(Argument arg: arguments){
-            System.out.println(arg.getAct() + " " + arg.getGoal() + " " + (arg.getSign().isPositive()? "+" : "-") + " " + arg.getVal());
+            System.out.println(arg.getAct() + " " + arg.getGoal() + " " + (arg.getSign().isPositive()? "+" : "-") + " " + audiences.get(arg.getAudience()));
         }
         for(Attack atc: relationship){
             Argument attacker = atc.getAttacker();
             Argument attacked = atc.getAttacked();
+            Integer AudienceA1 = audiences.get(attacker.getAudience());
+            Integer AudienceA2 = audiences.get(attacked.getAudience());
             System.out.println(attacker.getAct() + " "
                     + attacker.getAudience() + " "
                     + (attacker.getSign().isPositive() ? "+" : "-")
-                    + " "  + attacker.getVal()
+                    + " "  + AudienceA1
                     + " ----> "
                     + attacked.getAct() + " "
                     + attacked.getAudience() + " "
                     + (attacked.getSign().isPositive() ? "+" : "-") + " "
-                    + attacked.getVal());
+                    + AudienceA2);
         }
         ArrayList<Argument> acceptableArguments = getPreferredExtension();
         for(Argument arg : acceptableArguments){
             System.out.println("{" + arg.getAct()
                     + " " + arg.getAudience()
                     + " " + arg.getSign()
-                    + " " + arg.getVal()
+                    + " " + audiences.get(arg.getAudience())
                     + "}");
         }
     }
@@ -72,6 +69,8 @@ public class IVAF{
                 }
                 Argument i = arguments.get(x);
                 Argument e = arguments.get(y);
+                Integer audienceI = audiences.get(i.getAudience());
+                Integer audienceE = audiences.get(e.getAudience());
                 // if under the same goal
                 if(i.getGoal().equals(e.getGoal())){
                     // a = a', s = - and s' = +
@@ -79,7 +78,7 @@ public class IVAF{
                         Attack attackRelationAB = new Attack(i, e);
                         relationship.add(attackRelationAB);
                     // a = a', v != v' and s = s' = +
-                    }else if(i.getAct().equals(e.getAct()) && !(i.getVal() == e.getVal()) &&
+                    }else if(i.getAct().equals(e.getAct()) && !(audienceI == audienceE) &&
                              i.getSign().isPositive() && e.getSign().isPositive()){
                         Attack attackRelationAB = new Attack(i, e);
                         relationship.add(attackRelationAB);
@@ -100,6 +99,8 @@ public class IVAF{
      */
     public boolean defeat(Argument a1, Argument a2){
         boolean contains = false;
+        Integer audienceA1 = audiences.get(a1.getAudience());
+        Integer audienceA2 = audiences.get(a2.getAudience());
         for (Attack atc: relationship){
             if (atc.attacker == a2 && atc.attacked == a1) {
                 contains = true;
@@ -107,9 +108,9 @@ public class IVAF{
             }
         }
         if(contains){
-            return a1.getVal() > a2.getVal();
+            return audienceA1 > audienceA2;
         }else{
-            return a1.getVal() >= a2.getVal();
+            return audienceA1 >= audienceA2;
         }
     }
 

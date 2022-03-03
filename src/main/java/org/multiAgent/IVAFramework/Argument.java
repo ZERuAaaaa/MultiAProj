@@ -13,25 +13,23 @@ public class Argument {
         private String action;
         private String goal;
         private String audience;
-        private Integer val;
         private Sign sign;
 
-        public Argument(String action, String goal){
-            this.action = action;
-            this.goal = goal;
-        }
-
-        public Argument(String action, String goal, String audience, Sign sign, Integer val){
+        public Argument(String action, String goal,String sign, String audience){
+            switch (sign){
+                case("-"): this.sign = Sign.NEGATIVE;
+                    break;
+                case("+"): this.sign = Sign.POSITIVE;
+                    break;
+            }
             this.action = action;
             this.goal = goal;
             this.audience = audience;
-            this.sign = sign;
-            this.val = val;
-            this.audienced = true;
         }
 
+
         public String toString(){
-            return "<"+ action + "," + goal + "," + audience + "," + sign + val + ">";
+            return "<"+ action + "," + goal + "," + sign + "," +  audience + ">";
         }
 
         public String getAct(){
@@ -42,9 +40,6 @@ public class Argument {
             return goal;
         }
 
-        public Integer getVal(){
-            return val;
-        }
 
         public Sign getSign(){
             return sign;
@@ -52,10 +47,6 @@ public class Argument {
 
         public String getAudience(){
             return audience;
-        }
-
-        public void setVal(Integer val){
-            this.val = val;
         }
 
         public void seted(){this.audienced = true;}
