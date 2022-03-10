@@ -3,10 +3,12 @@ package org.multiAgent.BroadCastCommunication;
 import org.multiAgent.Agent;
 import org.multiAgent.DialogueSystem;
 import org.multiAgent.IVAFramework.Argument;
+import org.multiAgent.IVAFramework.Sign;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class Messager {
 
@@ -16,8 +18,15 @@ public class Messager {
 
     }
 
-    public <T> void broadCast(Agent proposer, MoveType type, T content){
-
+    public <T> void broadCast(Move move, Agent agent, ArrayList<Agent> agents){
+        if(move.getType() == MoveType.ASSERT){
+            for(Agent age: agents){
+                if(age != agent){
+                    age.getDvaf().insertArgument((Argument) move.getContent());
+                }
+            }
+        }
+        addMessage(move);
     }
 
     public void printLog(){
@@ -39,11 +48,27 @@ public class Messager {
     }
 
     public boolean checkMessageExistence(MoveType type, Argument argument){
+
         boolean exist = false;
         for (Move move: messageLog){
             if(move.getType() == type && move.getContent() == argument){
                 exist = true;
                 break;
+            }
+        }
+        return exist;
+    }
+
+    public boolean checkMessageExistence(MoveType type, String action, Sign sign){
+        boolean exist = false;
+
+        for (Move move: messageLog){
+            if(move.getType() == MoveType.ASSERT){
+                Argument currentArgument = ((Argument) move.getContent());
+                if(move.getType() == type && currentArgument.getAct() == action && currentArgument.getSign() == sign){
+                    exist = true;
+                    break;
+                }
             }
         }
         return exist;
@@ -82,4 +107,42 @@ public class Messager {
         }
         return 0;
     }
+
+    public boolean checkAgreed(String action, Agent agent){
+        boolean canAgree = false;
+        Move lastOne = getLastOne();
+        if(lastOne.getSender() != agent &&
+           lastOne.getType() == MoveType.AGREE &&
+           lastOne.getContent().equals(action)){
+            canAgree = true;
+        }else{
+            for(int i = 0; i < messageLog.size(); i++){
+                Move move0 = messageLog.get(i);
+                if(move0.getSender() != agent &&
+                        move0.getType() == MoveType.ASSERT &&
+                        ((Argument) move0.getContent()).getAct().equals(action) &&
+                        ((Argument) move0.getContent()).getSign() == Sign.POSITIVE){
+                    canAgree = true;
+                    for(int j = i + 1; j < messageLog.size(); j++){
+                        Move move1 = messageLog.get(j);
+                        if(move1.getSender() == agent &&
+                                move1.getType() == MoveType.AGREE &&
+                                move1.getContent().equals(action)){
+                            canAgree = false;
+                            for(int k = j + 1; k < messageLog.size(); k++){
+                                Move move2 = messageLog.get(k);
+                                if(move2.getSender() == agent && move2.getType() == MoveType.ASSERT){
+                                    canAgree = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return canAgree;
+    }
+
+
+
 }

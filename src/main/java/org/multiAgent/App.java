@@ -1,10 +1,6 @@
 package org.multiAgent;
 
-import org.multiAgent.BroadCastCommunication.Messager;
-import org.multiAgent.BroadCastCommunication.Move;
-import org.multiAgent.BroadCastCommunication.MoveType;
 import org.multiAgent.IVAFramework.Argument;
-import org.multiAgent.IVAFramework.IVAF;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +21,10 @@ public class App{
         Argument argument5 = new Argument("restaurant", "go out", "-", "D");
         Argument argument6 = new Argument("picnic", "go out", "-", "V");
 
+        Argument argument7 = new Argument("restaurant", "go out", "-", "M");
+        Argument argument8 = new Argument("picnic", "go out", "+", "D");
+        Argument argument9 = new Argument("restaurant", "go out", "+", "V");
+
         HashMap<String, Integer> audience1 = new HashMap<>();
         audience1.put("C", 4);
         audience1.put("D", 3);
@@ -36,11 +36,6 @@ public class App{
         arguments1.add(argument2);
         arguments1.add(argument3);
         arguments1.add(argument4);
-        Agent agent1 = new Agent(audience1, arguments1);
-        agent1.initializeByTopic("go out");
-        IVAF Dvaf1 = agent1.getDvaf();
-        //Dvaf1.print();
-
 
         HashMap<String, Integer> audience2 = new HashMap<>();
         audience2.put("C", 1);
@@ -52,25 +47,21 @@ public class App{
         arguments2.add(argument5);
         arguments2.add(argument6);
 
+        ArrayList<Argument> arguments3 = new ArrayList<>();
+        arguments3.add(argument7);
+        arguments3.add(argument8);
+        arguments3.add(argument9);
 
-        Agent agent2 = new Agent(audience2, arguments2);
+        HashMap<String, Integer> audience3 = new HashMap<>();
+        audience3.put("C", 1);
+        audience3.put("D", 2);
+        audience3.put("V", 4);
+        audience3.put("M", 3);
 
-        DialogueSystem ds = new DialogueSystem();
-        ds.setTopic("go out");
-        agent2.initializeByTopic("go out");
-        IVAF Dvaf2 = agent2.getDvaf();
-        //Dvaf2.print();
-        Messager messager = new Messager();
-        messager.addMessage(new Move(agent2, MoveType.OPEN, "go out"));
-        messager.addMessage(new Move(agent1, MoveType.ASSERT, argument1));
-        messager.addMessage(new Move(agent2, MoveType.ASSERT, argument5));
-        messager.addMessage(new Move(agent1, MoveType.ASSERT, argument4));
-        messager.addMessage(new Move(agent2, MoveType.ASSERT, argument6));
-        messager.addMessage(new Move(agent1, MoveType.ASSERT, argument3));
-        messager.addMessage(new Move(agent2, MoveType.CLOSE, "go out"));
-        messager.addMessage(new Move(agent1, MoveType.CLOSE, "go out"));
-        messager.printLog();
-        System.out.println(messager.checkClose());
-
+        DialogueSystem dialogue = new DialogueSystem();
+        dialogue.addAgent(audience1, arguments1);
+        dialogue.addAgent(audience2, arguments2);
+        dialogue.addAgent(audience3,arguments3);
+        dialogue.run("go out");
     }
 }

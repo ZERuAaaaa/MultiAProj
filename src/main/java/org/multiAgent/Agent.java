@@ -1,37 +1,42 @@
 package org.multiAgent;
 
+import javafx.util.Pair;
 import org.multiAgent.BroadCastCommunication.Messager;
-import org.multiAgent.BroadCastCommunication.Move;
 import org.multiAgent.BroadCastCommunication.Move;
 import org.multiAgent.BroadCastCommunication.MoveType;
 import org.multiAgent.IVAFramework.Argument;
 import org.multiAgent.IVAFramework.IVAF;
+import org.multiAgent.IVAFramework.Sign;
+import org.multiAgent.Models.NashDynamicModel;
+import org.multiAgent.Strategy.Preference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 /**
  * This class implements value-based transition system(VATS) for an single agent
  */
-
-
 public class Agent {
-
+    // dialogue iVAF for each agent
     private IVAF dvaf;
+
     private HashMap<String, Integer> audiences;
     private ArrayList<Argument> arguments;
     private final int AgentId;
+    // counter for agents
     public static int AgentCounter = 0;
-    /**
-     * default constructor for an Agent
-     */
-    public Agent(){
-        this.AgentId = AgentCounter++;
-        audiences = new HashMap<>();
-        arguments = new ArrayList<>();
-    }
+    // model of selecting argument with better winning value
+    public NashDynamicModel model;
+    // strategy of agent during the dialogue
+    public Preference strategy = new Preference();
 
+    /**
+     * default constructor of agent
+     * @param audiences audience of the agent
+     * @param arguments arguments of the agent
+     */
     public Agent(HashMap<String, Integer> audiences, ArrayList<Argument> arguments){
         this.AgentId = AgentCounter++;
         this.audiences = audiences;
@@ -41,8 +46,10 @@ public class Agent {
      * when dialogue is open, generate set of all arguments construct from S under the Goal,
      * and generate IVAF of a single agent
      * @param topic topic select by the dialogue
+     * @param dialogueInfo dialogue information to initialize the model
      */
-    public void initializeByTopic(String topic){
+    public void initializeByTopic(String topic, Pair<ArrayList<Agent>, HashMap<Agent, HashMap<String, Integer>>> dialogueInfo){
+        model = new NashDynamicModel(dialogueInfo, this);
         arguments = arguments.stream()
                         .filter(argument -> argument.getGoal().equals(topic))
                         .collect(Collectors
@@ -50,63 +57,123 @@ public class Agent {
         dvaf = new IVAF(arguments, audiences);
     }
 
-    public <T> void newMessage(Move<T> move){
-
+    /**
+     * the dialogue trigger the agent to act each round during the deliberation
+     * @param messager a messager record all logs during the deliberation
+     * @return the action an agent choosen
+     */
+    public Move Act(Messager messager){
+        ArrayList<Argument> agreeable = getAgreeable();
+        ArrayList<Argument> agreeableMoves = getAgreeable1();
+        HashSet<Move>[] availableMoves = protocol(messager);
+        return strategy.pickStrategy(availableMoves, agreeable, agreeableMoves,model, messager);
     }
 
-    public void Act(){
-
+    /**
+     * the agent will update their model every time when other agent make their move
+     * @param possibility a new possibility distribution to update the model
+     */
+    public void updateModel(HashMap<Agent,HashMap<String, Float>> possibility){
+        model.update(possibility);
     }
 
-    public ArrayList<Move>[] protocol(){
-        Messager messager = DialogueSystem.messager;
-        ArrayList<Move>[] availableMoves = new ArrayList[3];
+    /**
+     * this function returns all moves(agree, assert or close) current available for an agent to take
+     * @param messager dialogue log
+     * @return set of all moves
+     */
+    public HashSet<Move>[] protocol(Messager messager){
+        //Messager messager = DialogueSystem.messager;
+        HashSet<Move>[] availableMoves = new HashSet[3];
+        availableMoves[0] = new HashSet<Move>();
+        availableMoves[1] = new HashSet<Move>();
+        availableMoves[2] = new HashSet<Move>();
         availableMoves[2].add(new Move(this, MoveType.CLOSE, DialogueSystem.topic));
+        HashSet<String> actions = new HashSet<>();
         for (Argument arg: arguments){
+            actions.add(arg.getAct());
             // check whether the agent could assert the argument
             if (!messager.checkMessageExistence(MoveType.ASSERT, arg)){
                 availableMoves[0].add(new Move(this,MoveType.ASSERT,arg));
             }
-            // check whether the agent could agree with an action
-            Move lastMessage = messager.getLastOne();
-            if(lastMessage.getSender() != this && arg.getAct() == lastMessage.getContent()){
-                availableMoves[1].add(new Move(this, MoveType.AGREE, lastMessage.getContent()));
-            }else{
+        }
 
+        for(String act: actions){
+            if(messager.checkAgreed(act, this)){
+                availableMoves[1].add(new Move(this,MoveType.AGREE, act));
             }
-
         }
         return availableMoves;
     }
 
+    /**
+     * get all agreeable arguments
+     * @return arguments
+     */
     public ArrayList<Argument> getAgreeable(){
-        return dvaf.getPreferredExtension();
+        ArrayList<Argument> agreeable = dvaf.getPreferredExtension().stream()
+                .filter(argument -> argument.getSign() == Sign.POSITIVE)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return agreeable;
     }
 
-    public void addArgument(String action, String goal, String sign, String audience){
-        arguments.add(new Argument(action, goal, sign, audience));
+    /**
+     * get all arguments with agreeable actions
+     * @return arguments
+     */
+    public ArrayList<Argument> getAgreeable1(){
+        ArrayList<Argument> agreeable = dvaf.getPreferredExtension().stream()
+                .filter(argument -> argument.getSign() == Sign.POSITIVE)
+                .collect(Collectors.toCollection(ArrayList::new));
+        HashSet<String> agreeableAction = new HashSet<>();
+        for(Argument arg: agreeable){
+            agreeableAction.add(arg.getAct());
+        }
+        agreeable.clear();
+        for (Argument arg: arguments){
+            if(agreeableAction.contains(arg.getAct())){
+                agreeable.add(arg);
+            }
+        }
+        return agreeable;
     }
 
-    public void addAudience(String audience, Integer val){
-        audiences.put(audience, val);
+    /**
+     * return an agent's audiences
+     * @return audience
+     */
+    public HashMap<String, Integer> collectAgentInfo(){
+        return this.audiences;
     }
 
-    public void setArguments(ArrayList<Argument> arguments){
-        this.arguments = arguments;
+    /**
+     * return this agent's possibility distribution model
+     * @return possibility distribution
+     */
+    public HashMap<String, Float> getPossibility(){
+        return model.getPossibility();
     }
 
-    public void setAudiences(HashMap<String,Integer> audiences){
-        this.audiences = audiences;
-    }
-
+    /**
+     * get id of this agent
+     * @return agentId
+     */
     public int getAgentId(){
         return AgentId;
     }
 
+    /**
+     * get the agent's dialogue ivaf
+     * @return
+     */
     public IVAF getDvaf(){
         return dvaf;
     }
 
+    /**
+     * reset the agent
+     */
     public void reset(){
         dvaf = null;
         audiences.clear();

@@ -9,7 +9,6 @@ import java.util.ArrayList;
  */
 public class Argument {
 
-        private boolean audienced = false;
         private String action;
         private String goal;
         private String audience;
@@ -49,6 +48,4 @@ public class Argument {
             return audience;
         }
 
-        public void seted(){this.audienced = true;}
-
-    }
+}

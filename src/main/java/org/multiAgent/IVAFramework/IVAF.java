@@ -32,7 +32,7 @@ public class IVAF{
 
     public void print(){
         for(Argument arg: arguments){
-            System.out.println(arg.getAct() + " " + arg.getGoal() + " " + (arg.getSign().isPositive()? "+" : "-") + " " + audiences.get(arg.getAudience()));
+            System.out.println(arg.getAct() + " " + arg.getAudience() +" " + arg.getGoal() + " " + (arg.getSign().isPositive()? "+" : "-") + " " + audiences.get(arg.getAudience()));
         }
         for(Attack atc: relationship){
             Argument attacker = atc.getAttacker();
