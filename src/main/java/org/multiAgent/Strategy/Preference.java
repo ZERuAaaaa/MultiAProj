@@ -5,7 +5,10 @@ import org.multiAgent.BroadCastCommunication.Move;
 import org.multiAgent.BroadCastCommunication.MoveType;
 import org.multiAgent.IVAFramework.Argument;
 import org.multiAgent.IVAFramework.Sign;
+import org.multiAgent.Models.Model;
 import org.multiAgent.Models.NashDynamicModel;
+import org.multiAgent.Models.RandomModel;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,7 +35,8 @@ public class Preference {
      * @param messager the logger which keeping rocording the dialogue
      * @return  selected move
      */
-    public Move pickStrategy(HashSet<Move>[] availableMoves, ArrayList<Argument> agreeable, ArrayList<Argument> argumentsOfAgreeable, NashDynamicModel model, Messager messager){
+    public Move pickStrategy(HashSet<Move>[] availableMoves, ArrayList<Argument> agreeable, ArrayList<Argument> argumentsOfAgreeable, Model model, Messager messager){
+
         HashMap<String, Float> Model = model.getDistribution();
         // available agree move
         ArrayList<Move> legalAgreeMove = new ArrayList<>();
@@ -60,6 +64,8 @@ public class Preference {
                 legalAttackAssertMove.add(move);
             }
         }
+
+
         if(!legalAgreeMove.isEmpty()){
             return legalAgreeMove.get(0);
         }else if (!legalPropAssertMove.isEmpty()){
@@ -69,6 +75,7 @@ public class Preference {
         }else{
             return (Move) availableMoves[2].toArray()[0];
         }
+
     }
 
     /**

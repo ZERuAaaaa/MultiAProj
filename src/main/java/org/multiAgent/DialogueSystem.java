@@ -5,6 +5,7 @@ import org.multiAgent.BroadCastCommunication.Messager;
 import org.multiAgent.BroadCastCommunication.Move;
 import org.multiAgent.BroadCastCommunication.MoveType;
 import org.multiAgent.IVAFramework.Argument;
+import org.multiAgent.Models.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +21,13 @@ public class DialogueSystem {
     public static int counter = 0;
     public static String topic = null;
 
+    public void reset(){
+        topic = null;
+        messager = new Messager();
+        agents.clear();
+        counter = 0;
+        Agent.AgentCounter = 0;
+    }
     /**
      * default constructor
      */
@@ -32,8 +40,8 @@ public class DialogueSystem {
      * @param audiences audiences of the new agent
      * @param arguments arguments of the new agent
      */
-    public void addAgent(HashMap<String, Integer> audiences, ArrayList<Argument> arguments){
-        agents.add(new Agent(audiences, arguments));
+    public void addAgent(HashMap<String, Integer> audiences, ArrayList<Argument> arguments, Model model){
+        agents.add(new Agent(audiences, arguments, model));
     }
 
     /**
@@ -61,10 +69,13 @@ public class DialogueSystem {
                 if(close != 0){
                     break;
                 }
+
                 counter++;
             }
+
         }
         messager.printLog();
+
         return close;
     }
 

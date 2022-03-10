@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NashDynamicModel {
+public class NashDynamicModel implements Model{
 
     ArrayList<Agent> agents;
     HashMap<Agent, HashMap<String, Integer>> audiences;
@@ -19,16 +19,13 @@ public class NashDynamicModel {
     HashMap<String, Float> dialoguePossibility = new HashMap<>();
     Agent self;
 
-    public NashDynamicModel(Pair<ArrayList<Agent>, HashMap<Agent, HashMap<String, Integer>>> dialogueInfo, Agent self) {
+    public NashDynamicModel() {}
+
+    public void initialize(Pair<ArrayList<Agent>, HashMap<Agent, HashMap<String, Integer>>> dialogueInfo, Agent self){
         this.agents = dialogueInfo.getKey();
         this.audiences = dialogueInfo.getValue();
         this.self = self;
         buildPayoffMatrix();
-        initialize();
-
-    }
-
-    public void initialize(){
         for (Map.Entry<String, Float> entry: selfPayoff.entrySet()){
            selfPossibility.put(entry.getKey(),  (float) 1 / selfPayoff.size());
         }

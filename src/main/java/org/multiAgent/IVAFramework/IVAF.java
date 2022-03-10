@@ -90,6 +90,7 @@ public class IVAF{
                 }
             }
         }
+
     }
 
     /**
@@ -173,6 +174,9 @@ public class IVAF{
     }
 
     public ArrayList<Argument> getPreferredExtension(){
+        ////////////////////////////////
+        long startTime = System.currentTimeMillis();
+        ////////////////////////////////
         ArrayList<ArrayList<Argument>> allSubset = getAllSubset(arguments);
         allSubset.removeIf(subset -> !isAdmissible(subset));
         if(allSubset.isEmpty()){
@@ -184,7 +188,11 @@ public class IVAF{
                 preferredExtension = admissibleSet;
             }
         }
-
+        /////////////////////////////////////
+        //System.out.println("getPreferredExtension");
+        //long endTime = System.currentTimeMillis();
+        //System.out.println(endTime - startTime);
+        /////////////////////////////////////
         return preferredExtension;
     }
 

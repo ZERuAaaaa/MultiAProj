@@ -51,7 +51,7 @@ public class Messager {
 
         boolean exist = false;
         for (Move move: messageLog){
-            if(move.getType() == type && move.getContent() == argument){
+            if(move.getType() == type && ((Argument) move.getContent()).getAct().equals(argument.getAct())){
                 exist = true;
                 break;
             }
@@ -65,7 +65,7 @@ public class Messager {
         for (Move move: messageLog){
             if(move.getType() == MoveType.ASSERT){
                 Argument currentArgument = ((Argument) move.getContent());
-                if(move.getType() == type && currentArgument.getAct() == action && currentArgument.getSign() == sign){
+                if(move.getType() == type && currentArgument.getAct().equals(action) && currentArgument.getSign() == sign){
                     exist = true;
                     break;
                 }
@@ -97,7 +97,7 @@ public class Messager {
             HashSet<Agent> agreeCloseAgents = new HashSet<>();
             String agreement = (String) lastMessage.get(0).getContent();
             for (Move move: lastMessage){
-                if(move.type == MoveType.AGREE && move.getContent() == agreement){
+                if(move.type == MoveType.AGREE && move.getContent().equals(agreement)){
                     agreeCloseAgents.add(move.getSender());
                 }
             }

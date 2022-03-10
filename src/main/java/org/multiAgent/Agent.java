@@ -7,7 +7,9 @@ import org.multiAgent.BroadCastCommunication.MoveType;
 import org.multiAgent.IVAFramework.Argument;
 import org.multiAgent.IVAFramework.IVAF;
 import org.multiAgent.IVAFramework.Sign;
+import org.multiAgent.Models.Model;
 import org.multiAgent.Models.NashDynamicModel;
+import org.multiAgent.Models.RandomModel;
 import org.multiAgent.Strategy.Preference;
 
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class Agent {
     // counter for agents
     public static int AgentCounter = 0;
     // model of selecting argument with better winning value
-    public NashDynamicModel model;
+    public Model model;
     // strategy of agent during the dialogue
     public Preference strategy = new Preference();
 
@@ -37,7 +39,8 @@ public class Agent {
      * @param audiences audience of the agent
      * @param arguments arguments of the agent
      */
-    public Agent(HashMap<String, Integer> audiences, ArrayList<Argument> arguments){
+    public Agent(HashMap<String, Integer> audiences, ArrayList<Argument> arguments, Model model){
+        this.model = model;
         this.AgentId = AgentCounter++;
         this.audiences = audiences;
         this.arguments = arguments;
@@ -49,7 +52,7 @@ public class Agent {
      * @param dialogueInfo dialogue information to initialize the model
      */
     public void initializeByTopic(String topic, Pair<ArrayList<Agent>, HashMap<Agent, HashMap<String, Integer>>> dialogueInfo){
-        model = new NashDynamicModel(dialogueInfo, this);
+        model.initialize(dialogueInfo, this);
         arguments = arguments.stream()
                         .filter(argument -> argument.getGoal().equals(topic))
                         .collect(Collectors
@@ -66,7 +69,7 @@ public class Agent {
         ArrayList<Argument> agreeable = getAgreeable();
         ArrayList<Argument> agreeableMoves = getAgreeable1();
         HashSet<Move>[] availableMoves = protocol(messager);
-        return strategy.pickStrategy(availableMoves, agreeable, agreeableMoves,model, messager);
+        return strategy.pickStrategy(availableMoves, agreeable, agreeableMoves, model, messager);
     }
 
     /**

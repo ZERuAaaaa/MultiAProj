@@ -1,9 +1,13 @@
 package org.multiAgent;
 
+import javafx.util.Pair;
 import org.multiAgent.IVAFramework.Argument;
+import org.multiAgent.Models.NashDynamicModel;
+import org.multiAgent.Models.RandomModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.Delayed;
 
 /**
  * Hello world!
@@ -13,55 +17,46 @@ public class App{
 
     public static void main(String[] args) {
 
-        Argument argument1 = new Argument("restaurant", "go out", "+","C");
-        Argument argument2 = new Argument("picnic", "go out", "+", "C");
-        Argument argument3 = new Argument("picnic", "go out", "+", "M");
-        Argument argument4 = new Argument("picnic", "go out", "+", "D");
+        int win = 0;
+        int loss = 0;
+        int win1 = 0;
+        int loss1 = 0;
 
-        Argument argument5 = new Argument("restaurant", "go out", "-", "D");
-        Argument argument6 = new Argument("picnic", "go out", "-", "V");
+        for (int e = 0; e < 1000; e++){
+            System.out.println(e);
+            RandomGenerator generator = new RandomGenerator(10);
+            DialogueSystem dialogue = new DialogueSystem();
+            Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String, Integer>>> temp = generator.getByAgent(5, 50, 20);
+            ArrayList<ArrayList<Argument>> arguments = temp.getKey();
+            ArrayList<HashMap<String, Integer>> audiences = temp.getValue();
+            NashDynamicModel nashModel = new NashDynamicModel();
+            RandomModel randomModel = new RandomModel();
 
-        Argument argument7 = new Argument("restaurant", "go out", "-", "M");
-        Argument argument8 = new Argument("picnic", "go out", "+", "D");
-        Argument argument9 = new Argument("restaurant", "go out", "+", "V");
+            for (int i = 0; i < arguments.size(); i++){
+                dialogue.addAgent(audiences.get(i), arguments.get(i), randomModel);
+            }
+            int result =  dialogue.run("topic");
+            if (result == 1){
+                win ++;
+            }else{
+                loss++;
+            }
+            dialogue.reset();
 
-        HashMap<String, Integer> audience1 = new HashMap<>();
-        audience1.put("C", 4);
-        audience1.put("D", 3);
-        audience1.put("V", 2);
-        audience1.put("M", 1);
+            DialogueSystem dialogue1 = new DialogueSystem();
+            for (int i = 0; i < arguments.size(); i++){
+                dialogue.addAgent(audiences.get(i), arguments.get(i), nashModel);
+            }
+            int result1 =  dialogue1.run("topic");
+            if (result1 == 1){
+                win1 ++;
+            }else{
+                loss1++;
+            }
+            dialogue.reset();
+        }
+        System.out.println("Random win: " + win + " " + "loss: " + loss);
+        System.out.println("Nash win: " + win1 + " " + "loss: " + loss1);
 
-        ArrayList<Argument> arguments1 = new ArrayList<>();
-        arguments1.add(argument1);
-        arguments1.add(argument2);
-        arguments1.add(argument3);
-        arguments1.add(argument4);
-
-        HashMap<String, Integer> audience2 = new HashMap<>();
-        audience2.put("C", 1);
-        audience2.put("D", 2);
-        audience2.put("V", 3);
-        audience2.put("M", 4);
-
-        ArrayList<Argument> arguments2 = new ArrayList<>();
-        arguments2.add(argument5);
-        arguments2.add(argument6);
-
-        ArrayList<Argument> arguments3 = new ArrayList<>();
-        arguments3.add(argument7);
-        arguments3.add(argument8);
-        arguments3.add(argument9);
-
-        HashMap<String, Integer> audience3 = new HashMap<>();
-        audience3.put("C", 1);
-        audience3.put("D", 2);
-        audience3.put("V", 4);
-        audience3.put("M", 3);
-
-        DialogueSystem dialogue = new DialogueSystem();
-        dialogue.addAgent(audience1, arguments1);
-        dialogue.addAgent(audience2, arguments2);
-        dialogue.addAgent(audience3,arguments3);
-        dialogue.run("go out");
     }
 }
