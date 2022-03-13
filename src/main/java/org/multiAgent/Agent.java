@@ -9,7 +9,6 @@ import org.multiAgent.IVAFramework.IVAF;
 import org.multiAgent.IVAFramework.Sign;
 import org.multiAgent.Models.Model;
 import org.multiAgent.Models.NashDynamicModel;
-import org.multiAgent.Models.RandomModel;
 import org.multiAgent.Strategy.Preference;
 
 import java.util.ArrayList;
@@ -54,9 +53,9 @@ public class Agent {
     public void initializeByTopic(String topic, Pair<ArrayList<Agent>, HashMap<Agent, HashMap<String, Integer>>> dialogueInfo){
         model.initialize(dialogueInfo, this);
         arguments = arguments.stream()
-                        .filter(argument -> argument.getGoal().equals(topic))
-                        .collect(Collectors
-                                .toCollection(ArrayList::new));
+                .filter(argument -> argument.getGoal().equals(topic))
+                .collect(Collectors
+                        .toCollection(ArrayList::new));
         dvaf = new IVAF(arguments, audiences);
     }
 
@@ -67,9 +66,9 @@ public class Agent {
      */
     public Move Act(Messager messager){
         ArrayList<Argument> agreeable = getAgreeable();
-        ArrayList<Argument> agreeableMoves = getAgreeable1();
+        ArrayList<Argument> agreeableMoves = getAgreeable1(agreeable);
         HashSet<Move>[] availableMoves = protocol(messager);
-        return strategy.pickStrategy(availableMoves, agreeable, agreeableMoves, model, messager);
+        return strategy.pickStrategy(availableMoves, agreeable, agreeableMoves,model, messager);
     }
 
     /**
@@ -88,9 +87,9 @@ public class Agent {
     public HashSet<Move>[] protocol(Messager messager){
         //Messager messager = DialogueSystem.messager;
         HashSet<Move>[] availableMoves = new HashSet[3];
-        availableMoves[0] = new HashSet<Move>();
-        availableMoves[1] = new HashSet<Move>();
-        availableMoves[2] = new HashSet<Move>();
+        availableMoves[0] = new HashSet<>();
+        availableMoves[1] = new HashSet<>();
+        availableMoves[2] = new HashSet<>();
         availableMoves[2].add(new Move(this, MoveType.CLOSE, DialogueSystem.topic));
         HashSet<String> actions = new HashSet<>();
         for (Argument arg: arguments){
@@ -114,21 +113,17 @@ public class Agent {
      * @return arguments
      */
     public ArrayList<Argument> getAgreeable(){
-        ArrayList<Argument> agreeable = dvaf.getPreferredExtension().stream()
+
+        return dvaf.getPreferredExtension().stream()
                 .filter(argument -> argument.getSign() == Sign.POSITIVE)
                 .collect(Collectors.toCollection(ArrayList::new));
-
-        return agreeable;
     }
 
     /**
      * get all arguments with agreeable actions
      * @return arguments
      */
-    public ArrayList<Argument> getAgreeable1(){
-        ArrayList<Argument> agreeable = dvaf.getPreferredExtension().stream()
-                .filter(argument -> argument.getSign() == Sign.POSITIVE)
-                .collect(Collectors.toCollection(ArrayList::new));
+    public ArrayList<Argument> getAgreeable1(ArrayList<Argument> agreeable){
         HashSet<String> agreeableAction = new HashSet<>();
         for(Argument arg: agreeable){
             agreeableAction.add(arg.getAct());
@@ -142,6 +137,14 @@ public class Agent {
         return agreeable;
     }
 
+    public HashSet<String> getAgreeableAction(){
+        ArrayList<Argument> agreeable = getAgreeable();
+        HashSet<String> agreeableAction = new HashSet<>();
+        for(Argument arg: agreeable){
+            agreeableAction.add(arg.getAct());
+        }
+        return agreeableAction;
+    }
     /**
      * return an agent's audiences
      * @return audience

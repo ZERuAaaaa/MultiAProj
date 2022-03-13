@@ -9,43 +9,41 @@ import java.util.ArrayList;
  */
 public class Argument {
 
-        private String action;
-        private String goal;
-        private String audience;
-        private Sign sign;
+    private String action;
+    private String goal;
+    private String audience;
+    private Sign sign;
 
-        public Argument(String action, String goal,String sign, String audience){
-            switch (sign){
-                case("-"): this.sign = Sign.NEGATIVE;
-                    break;
-                case("+"): this.sign = Sign.POSITIVE;
-                    break;
-            }
-            this.action = action;
-            this.goal = goal;
-            this.audience = audience;
+    public Argument(String action, String goal,String sign, String audience){
+        switch (sign) {
+            case ("-") -> this.sign = Sign.NEGATIVE;
+            case ("+") -> this.sign = Sign.POSITIVE;
         }
+        this.action = action;
+        this.goal = goal;
+        this.audience = audience;
+    }
 
 
-        public String toString(){
-            return "<"+ action + "," + goal + "," + sign + "," +  audience + ">";
-        }
+    public String toString(){
+        return "<"+ action + "," + goal + "," + sign + "," +  audience + ">";
+    }
 
-        public String getAct(){
-            return action;
-        }
+    public String getAct(){
+        return action;
+    }
 
-        public String getGoal(){
-            return goal;
-        }
+    public String getGoal(){
+        return goal;
+    }
 
 
-        public Sign getSign(){
-            return sign;
-        }
+    public Sign getSign(){
+        return sign;
+    }
 
-        public String getAudience(){
-            return audience;
-        }
+    public String getAudience(){
+        return audience;
+    }
 
 }

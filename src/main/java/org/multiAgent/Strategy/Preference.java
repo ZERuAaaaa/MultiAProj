@@ -7,8 +7,6 @@ import org.multiAgent.IVAFramework.Argument;
 import org.multiAgent.IVAFramework.Sign;
 import org.multiAgent.Models.Model;
 import org.multiAgent.Models.NashDynamicModel;
-import org.multiAgent.Models.RandomModel;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,7 +34,6 @@ public class Preference {
      * @return  selected move
      */
     public Move pickStrategy(HashSet<Move>[] availableMoves, ArrayList<Argument> agreeable, ArrayList<Argument> argumentsOfAgreeable, Model model, Messager messager){
-
         HashMap<String, Float> Model = model.getDistribution();
         // available agree move
         ArrayList<Move> legalAgreeMove = new ArrayList<>();
@@ -52,7 +49,7 @@ public class Preference {
         for (Move move : availableMoves[0]){
             Argument currentArgument = (Argument) move.getContent();
             if(argumentsOfAgreeable.contains(currentArgument) && currentArgument.getSign() == Sign.POSITIVE){
-                    legalPropAssertMove.add(move);
+                legalPropAssertMove.add(move);
             }
 
         }
@@ -64,8 +61,6 @@ public class Preference {
                 legalAttackAssertMove.add(move);
             }
         }
-
-
         if(!legalAgreeMove.isEmpty()){
             return legalAgreeMove.get(0);
         }else if (!legalPropAssertMove.isEmpty()){
@@ -75,7 +70,6 @@ public class Preference {
         }else{
             return (Move) availableMoves[2].toArray()[0];
         }
-
     }
 
     /**

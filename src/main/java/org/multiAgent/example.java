@@ -1,7 +1,6 @@
 package org.multiAgent;
 
 import org.multiAgent.IVAFramework.Argument;
-import org.multiAgent.Models.Model;
 import org.multiAgent.Models.NashDynamicModel;
 import org.multiAgent.Models.RandomModel;
 
@@ -12,11 +11,11 @@ import java.util.HashMap;
  * Hello world!
  *
  */
-public class example {
+public class example{
 
     public static void main(String[] args) {
 
-        Argument argument1 = new Argument("restaurant", "go out", "+", "C");
+        Argument argument1 = new Argument("restaurant", "go out", "+","C");
         Argument argument2 = new Argument("picnic", "go out", "+", "C");
         Argument argument3 = new Argument("picnic", "go out", "+", "M");
         Argument argument4 = new Argument("picnic", "go out", "+", "D");
@@ -60,12 +59,12 @@ public class example {
         audience3.put("D", 2);
         audience3.put("V", 4);
         audience3.put("M", 3);
-        Model randModel = new RandomModel();
-        Model nashModel = new NashDynamicModel();
+
         DialogueSystem dialogue = new DialogueSystem();
-        dialogue.addAgent(audience1, arguments1, randModel);
-        dialogue.addAgent(audience2, arguments2, randModel);
-        //dialogue.addAgent(audience3, arguments3,randModel);
+        NashDynamicModel nashModel = new NashDynamicModel();
+        RandomModel randomModel = new RandomModel();
+        dialogue.addAgent(audience1, arguments1, nashModel);
+        dialogue.addAgent(audience2, arguments2, nashModel);
         dialogue.run("go out");
     }
 }

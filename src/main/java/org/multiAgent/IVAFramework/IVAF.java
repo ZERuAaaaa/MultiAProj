@@ -1,20 +1,31 @@
 package org.multiAgent.IVAFramework;
 
-
 import javafx.util.Pair;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-public class IVAF{
-
+public class IVAF {
     private ArrayList<Argument> arguments;
 
     private HashMap<String, Integer> audiences;
 
     private ArrayList<Attack> relationship = new ArrayList<>();
 
+    private ArrayList<Attack> defeatRelationship = new ArrayList<>();
+
+    public ArrayList<Argument>[] labelings = new ArrayList[3];
+
+    public ArrayList<ArrayList<Argument>> candidate_labellings = new ArrayList<>();
+
     public IVAF(ArrayList<Argument> arguments, HashMap<String, Integer> audiences){
+        for (int i = 0; i < labelings.length; i++){
+            labelings[i] = new ArrayList<>();
+        }
+        for (Argument arg: arguments){
+            labelings[0].add(arg);
+        }
+
         this.arguments = arguments;
         this.audiences = audiences;
         setRelationship();
@@ -34,7 +45,7 @@ public class IVAF{
         for(Argument arg: arguments){
             System.out.println(arg.getAct() + " " + arg.getAudience() +" " + arg.getGoal() + " " + (arg.getSign().isPositive()? "+" : "-") + " " + audiences.get(arg.getAudience()));
         }
-        for(Attack atc: relationship){
+        for(Attack atc: defeatRelationship){
             Argument attacker = atc.getAttacker();
             Argument attacked = atc.getAttacked();
             Integer AudienceA1 = audiences.get(attacker.getAudience());
@@ -49,14 +60,14 @@ public class IVAF{
                     + (attacked.getSign().isPositive() ? "+" : "-") + " "
                     + AudienceA2);
         }
-        ArrayList<Argument> acceptableArguments = getPreferredExtension();
-        for(Argument arg : acceptableArguments){
-            System.out.println("{" + arg.getAct()
-                    + " " + arg.getAudience()
-                    + " " + arg.getSign()
-                    + " " + audiences.get(arg.getAudience())
-                    + "}");
-        }
+//        ArrayList<Argument> acceptableArguments = getPreferredExtension();
+//        for(Argument arg : acceptableArguments){
+//            System.out.println("{" + arg.getAct()
+//                    + " " + arg.getAudience()
+//                    + " " + arg.getSign()
+//                    + " " + audiences.get(arg.getAudience())
+//                    + "}");
+//        }
     }
     /**
      * generate relationship from existing arguments and audience after the audience are set
@@ -77,12 +88,12 @@ public class IVAF{
                     if(i.getAct().equals(e.getAct()) && i.getSign().isNegative() && e.getSign().isPositive()){
                         Attack attackRelationAB = new Attack(i, e);
                         relationship.add(attackRelationAB);
-                    // a = a', v != v' and s = s' = +
+                        // a = a', v != v' and s = s' = +
                     }else if(i.getAct().equals(e.getAct()) && !(audienceI == audienceE) &&
-                             i.getSign().isPositive() && e.getSign().isPositive()){
+                            i.getSign().isPositive() && e.getSign().isPositive()){
                         Attack attackRelationAB = new Attack(i, e);
                         relationship.add(attackRelationAB);
-                    // a != a' and s = s' = +
+                        // a != a' and s = s' = +
                     }else if(!i.getAct().equals(e.getAct()) && i.getSign().isPositive() && e.getSign().isPositive()){
                         Attack attackRelationAB = new Attack(i, e);
                         relationship.add(attackRelationAB);
@@ -90,7 +101,14 @@ public class IVAF{
                 }
             }
         }
-
+        defeatRelationship.clear();
+        for (Attack atc: relationship){
+            Argument attacker = atc.getAttacker();
+            Argument attacked = atc.getAttacked();
+            if (defeat(attacker, attacked)){
+                defeatRelationship.add(atc);
+            }
+        }
     }
 
     /**
@@ -115,9 +133,212 @@ public class IVAF{
         }
     }
 
+
+    public void find_labellings(ArrayList<Argument>[] labeling){
+        if (isCandidateSubset(labeling[0])){
+            return;
+        }
+        if(getIllegalIN(labeling).isEmpty()){
+            for (ArrayList<Argument> arg: candidate_labellings){
+                if (isSubSet(arg, labeling[0])){
+                    candidate_labellings.remove(arg);
+                }
+            }
+            candidate_labellings.add(labeling[0]);
+            return;
+        }else{
+            ArrayList<Argument> illegal = getSuperIllegalIN(labeling);
+            if (!illegal.isEmpty()){
+                find_labellings(transition_step(illegal.get(0),labeling));
+            }else{
+                illegal = getIllegalIN(labeling);
+                for (Argument arg: illegal){
+                    find_labellings(transition_step(arg,labeling));
+                }
+            }
+        }
+    }
+
+    public ArrayList<Argument> getPreferredExtension(){
+        for (ArrayList<Argument> list: labelings){
+            list.clear();
+        }
+        for (Argument arg: arguments){
+            labelings[0].add(arg);
+        }
+        candidate_labellings.clear();
+        find_labellings(labelings);
+        return candidate_labellings.get(0);
+    }
+
+    public ArrayList<Argument>[] transition_step(Argument x, ArrayList<Argument>[] labelin){
+         ArrayList<Argument>[] labeling = labelin;
+         moveArgument(labelin, x,0,1);
+         ArrayList<Argument> OUT = getIllegalOUT(labeling);
+         for (Argument arg: OUT){
+             moveArgument(labeling,arg,1,2);
+         }
+         return labeling;
+    }
+
+    public boolean isLegallyIN(Argument argument, ArrayList<Argument>[] labeling){
+        if(labeling[0].contains(argument)){
+            ArrayList<Argument> attackers = getAttackers(argument);
+            for (Argument atc: attackers){
+                if (!labeling[1].contains(atc)){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isSuperIllegallyIN(Argument argument, ArrayList<Argument>[] labeling){
+        if (labeling[0].contains(argument)){
+            ArrayList<Argument> attackers = getAttackers(argument);
+            for (Argument atc: attackers){
+                if(labeling[0].contains(atc) || labeling[2].contains(atc)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isLegallyOUT(Argument argument, ArrayList<Argument>[] labeling){
+        if (labeling[1].contains(argument)){
+            ArrayList<Argument> attackers = getAttackers(argument);
+            for(Argument atc: attackers){
+                if (labeling[0].contains(atc)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isLegallyUNDEC(Argument argument, ArrayList<Argument>[] labeling){
+        if (labeling[2].contains(argument)){
+            ArrayList<Argument> attackers = getAttackers(argument);
+            boolean notEvery = false;
+            boolean noAttackingIN = true;
+            for (Argument atc: attackers){
+                if(!labeling[1].contains(atc)){
+                    notEvery = true;
+                }
+                if(labeling[0].contains(atc)){
+                    noAttackingIN = false;
+                }
+            }
+            return notEvery & noAttackingIN;
+        }
+        return false;
+    }
+
+    public void moveArgument(ArrayList<Argument>[] labeling ,Argument argument, int from, int to){
+        labeling[from].remove(argument);
+        labeling[to].add(argument);
+    }
+
+    public boolean isLabelingAdmissible(ArrayList<Argument>[] labeling){
+        for(Argument arg: labeling[0]){
+            if(!isLegallyIN(arg, labeling)){
+                return false;
+            }
+        }
+        for(Argument arg: labeling[1]){
+            if(!isLegallyOUT(arg, labeling)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isLabelingComplete(ArrayList<Argument>[] labeling){
+        for(Argument arg: labelings[2]){
+            if(!isLegallyUNDEC(arg, labeling)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public ArrayList<Argument> getSuperIllegalIN(ArrayList<Argument>[] labeling){
+        ArrayList<Argument> out = new ArrayList<>();
+        for (Argument arg: labeling[0]){
+            if (isSuperIllegallyIN(arg, labeling)){
+                out.add(arg);
+            }
+        }
+        return out;
+    }
+
+    public ArrayList<Argument> getIllegalIN(ArrayList<Argument>[] labeling){
+        ArrayList<Argument> out = new ArrayList<>();
+        for (Argument arg: labeling[0]){
+            if (!isLegallyIN(arg, labeling)){
+                out.add(arg);
+            }
+        }
+        return out;
+    }
+
+    public ArrayList<Argument> getIllegalINP(ArrayList<Argument>[] labeling){
+        ArrayList<Argument> out = getSuperIllegalIN(labeling);
+        ArrayList<Argument> temp = getIllegalIN(labeling);
+        for (Argument arg: temp){
+            if(!out.contains(arg)){
+                out.add(arg);
+            }
+        }
+        return out;
+    }
+
+    public ArrayList<Argument> getIllegalOUT(ArrayList<Argument>[] labeling){
+        ArrayList<Argument> out = new ArrayList<>();
+        for (Argument arg: labeling[1]){
+            if (!isLegallyOUT(arg, labeling)){
+                out.add(arg);
+            }
+        }
+        return out;
+    }
+
+    public boolean isSubSet(ArrayList<Argument> child, ArrayList<Argument> parent){
+        for (Argument arg: child){
+            if (!parent.contains(arg)){
+                 return false;
+            }
+        }
+        return true;
+    }
+
+
+    public boolean isCandidateSubset(ArrayList<Argument> child){
+        for (ArrayList<Argument> e: candidate_labellings){
+            if(isSubSet(child, e)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     private ArrayList<Argument> getAttackers(Argument a){
         ArrayList<Argument> attackers = new ArrayList<>();
-        for(Attack attack: relationship){
+        for(Attack attack: defeatRelationship){
             if(attack.getAttacked() == a){
                 attackers.add(attack.getAttacker());
             }
@@ -173,50 +394,6 @@ public class IVAF{
         return false;
     }
 
-    public ArrayList<Argument> getPreferredExtension(){
-        ////////////////////////////////
-        long startTime = System.currentTimeMillis();
-        ////////////////////////////////
-        ArrayList<ArrayList<Argument>> allSubset = getAllSubset(arguments);
-        allSubset.removeIf(subset -> !isAdmissible(subset));
-        if(allSubset.isEmpty()){
-            return null;
-        }
-        ArrayList<Argument> preferredExtension = new ArrayList<>();
-        for(ArrayList<Argument> admissibleSet: allSubset){
-            if(admissibleSet.size() > preferredExtension.size()){
-                preferredExtension = admissibleSet;
-            }
-        }
-        /////////////////////////////////////
-        //System.out.println("getPreferredExtension");
-        //long endTime = System.currentTimeMillis();
-        //System.out.println(endTime - startTime);
-        /////////////////////////////////////
-        return preferredExtension;
-    }
-
-    /**
-     * use bit manipulation to get all the subset of arguments
-     * @param arguments list of all arguments hold by this IVAF
-     * @return subsets
-     */
-    private ArrayList<ArrayList<Argument>> getAllSubset(ArrayList<Argument> arguments){
-        ArrayList<ArrayList<Argument>> subsets = new ArrayList<>();
-        int size = 1 << arguments.size();
-        for(int i = 0 ; i < size ; i++){
-            ArrayList<Argument> subset = new ArrayList<>();
-            for(int e = 0; e < arguments.size(); e++){
-                if((i & (1 << e))!= 0){
-                    subset.add(arguments.get(e));
-                }
-            }
-            subsets.add(subset);
-        }
-        return subsets;
-    }
-
-
     public void insert(Argument argument){
         arguments.add(argument);
         setRelationship();
@@ -228,6 +405,5 @@ public class IVAF{
     public Pair<ArrayList<Argument>, ArrayList<Attack>> getIVAFTuple(){
         return new Pair(arguments, relationship);
     }
-
 
 }

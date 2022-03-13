@@ -22,12 +22,14 @@ public class App{
         int win1 = 0;
         int loss1 = 0;
 
-        for (int e = 0; e < 1000; e++){
+        for (int e = 0; e < 1; e++){
             System.out.println(e);
-            RandomGenerator generator = new RandomGenerator(10);
+            RandomGenerator generator = new RandomGenerator(2);
             DialogueSystem dialogue = new DialogueSystem();
-            Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String, Integer>>> temp = generator.getByAgent(5, 50, 20);
+            Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String, Integer>>> temp = generator.getByAgent(10, 100, 10);
+
             ArrayList<ArrayList<Argument>> arguments = temp.getKey();
+
             ArrayList<HashMap<String, Integer>> audiences = temp.getValue();
             NashDynamicModel nashModel = new NashDynamicModel();
             RandomModel randomModel = new RandomModel();
@@ -53,7 +55,7 @@ public class App{
             }else{
                 loss1++;
             }
-            dialogue.reset();
+            dialogue1.reset();
         }
         System.out.println("Random win: " + win + " " + "loss: " + loss);
         System.out.println("Nash win: " + win1 + " " + "loss: " + loss1);

@@ -9,6 +9,7 @@ import org.multiAgent.Models.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * this class implemented a dialogue system
@@ -56,9 +57,16 @@ public class DialogueSystem {
         messager.broadCast(new Move(lastAgent,MoveType.OPEN,topic), lastAgent, agents);
 
         // initialize the model and dvaf of each agent
+        //ArrayList<HashSet<String>> agreeable = new ArrayList<>();
         for (Agent age: agents){
             age.initializeByTopic(topic, getDialogueInfo());
+            //agreeable.add(age.getAgreeableAction());
         }
+        //HashSet<String> intersection = agreeable.get(0);
+        //for (int i = 1 ; i < agreeable.size(); i++){
+        //    intersection.retainAll(agreeable.get(i));
+        //}
+        //System.out.println(intersection);
         Integer close = 0;
         while(close == 0){
             for(Agent currentAgent: agents){
@@ -66,6 +74,9 @@ public class DialogueSystem {
                 Move currentMove = currentAgent.Act(messager);
                 messager.broadCast(currentMove, currentAgent, agents);
                 close = messager.checkClose();
+                //System.out.println("\n" + currentAgent.getAgentId());
+                //currentAgent.getDvaf().print();
+                //System.out.println(messager.getLastOne());
                 if(close != 0){
                     break;
                 }
@@ -74,8 +85,6 @@ public class DialogueSystem {
             }
 
         }
-        messager.printLog();
-
         return close;
     }
 

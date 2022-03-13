@@ -51,7 +51,7 @@ public class Messager {
 
         boolean exist = false;
         for (Move move: messageLog){
-            if(move.getType() == type && ((Argument) move.getContent()).getAct().equals(argument.getAct())){
+            if(move.getType() == type && move.getContent() == argument){
                 exist = true;
                 break;
             }
@@ -112,8 +112,8 @@ public class Messager {
         boolean canAgree = false;
         Move lastOne = getLastOne();
         if(lastOne.getSender() != agent &&
-           lastOne.getType() == MoveType.AGREE &&
-           lastOne.getContent().equals(action)){
+                lastOne.getType() == MoveType.AGREE &&
+                lastOne.getContent().equals(action)){
             canAgree = true;
         }else{
             for(int i = 0; i < messageLog.size(); i++){
