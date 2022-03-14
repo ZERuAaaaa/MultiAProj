@@ -1,0 +1,22 @@
+--class-path
+'C:/Users/moyuq/Desktop/Dialogue_System/target/classes;C:/Users/moyuq/.m2/repository/org/openjfx/javafx-controls/17.0.2/javafx-controls-17.0.2.jar;C:/Users/moyuq/.m2/repository/org/openjfx/javafx-controls/17.0.2/javafx-controls-17.0.2-win.jar;C:/Users/moyuq/.m2/repository/org/openjfx/javafx-graphics/17.0.2/javafx-graphics-17.0.2.jar;C:/Users/moyuq/.m2/repository/org/openjfx/javafx-graphics/17.0.2/javafx-graphics-17.0.2-win.jar;C:/Users/moyuq/.m2/repository/org/openjfx/javafx-base/17.0.2/javafx-base-17.0.2.jar;C:/Users/moyuq/.m2/repository/org/openjfx/javafx-base/17.0.2/javafx-base-17.0.2-win.jar;C:/Users/moyuq/.m2/repository/org/testng/testng/7.5/testng-7.5.jar;C:/Users/moyuq/.m2/repository/com/google/code/findbugs/jsr305/3.0.1/jsr305-3.0.1.jar;C:/Users/moyuq/.m2/repository/org/slf4j/slf4j-api/1.7.32/slf4j-api-1.7.32.jar;C:/Users/moyuq/.m2/repository/com/beust/jcommander/1.78/jcommander-1.78.jar;C:/Users/moyuq/.m2/repository/org/knowm/xchart/xchart/3.8.2-SNAPSHOT/xchart-3.8.2-SNAPSHOT.jar;C:/Users/moyuq/.m2/repository/de/erichseifert/vectorgraphics2d/VectorGraphics2D/0.13/VectorGraphics2D-0.13.jar;C:/Users/moyuq/.m2/repository/de/rototor/pdfbox/graphics2d/0.33/graphics2d-0.33.jar;C:/Users/moyuq/.m2/repository/org/apache/pdfbox/pdfbox/2.0.24/pdfbox-2.0.24.jar;C:/Users/moyuq/.m2/repository/org/apache/pdfbox/fontbox/2.0.24/fontbox-2.0.24.jar;C:/Users/moyuq/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar;C:/Users/moyuq/.m2/repository/com/madgag/animated-gif-lib/1.4/animated-gif-lib-1.4.jar'
+-encoding
+'GBK'
+-protected
+-sourcepath
+'C:/Users/moyuq/Desktop/Dialogue_System/src/main/java;C:/Users/moyuq/Desktop/Dialogue_System/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2022. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/moyuq/Desktop/Dialogue_System/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'multiagentProj 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'multiagentProj 1.0-SNAPSHOT API'

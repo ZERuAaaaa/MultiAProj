@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="org.multiAgent.AppTest" time="0.344" tests="1" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="17"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="GBK"/>
+    <property name="java.class.path" value="C:\Users\moyuq\Desktop\Dialogue_System\target\test-classes;C:\Users\moyuq\Desktop\Dialogue_System\target\classes;C:\Users\moyuq\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\moyuq\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\moyuq\.m2\repository\org\openjfx\javafx-controls\17.0.2\javafx-controls-17.0.2.jar;C:\Users\moyuq\.m2\repository\org\openjfx\javafx-controls\17.0.2\javafx-controls-17.0.2-win.jar;C:\Users\moyuq\.m2\repository\org\openjfx\javafx-graphics\17.0.2\javafx-graphics-17.0.2.jar;C:\Users\moyuq\.m2\repository\org\openjfx\javafx-graphics\17.0.2\javafx-graphics-17.0.2-win.jar;C:\Users\moyuq\.m2\repository\org\openjfx\javafx-base\17.0.2\javafx-base-17.0.2.jar;C:\Users\moyuq\.m2\repository\org\openjfx\javafx-base\17.0.2\javafx-base-17.0.2-win.jar;C:\Users\moyuq\.m2\repository\org\testng\testng\7.5\testng-7.5.jar;C:\Users\moyuq\.m2\repository\com\google\code\findbugs\jsr305\3.0.1\jsr305-3.0.1.jar;C:\Users\moyuq\.m2\repository\org\slf4j\slf4j-api\1.7.32\slf4j-api-1.7.32.jar;C:\Users\moyuq\.m2\repository\com\beust\jcommander\1.78\jcommander-1.78.jar;C:\Users\moyuq\.m2\repository\org\webjars\jquery\3.5.1\jquery-3.5.1.jar;C:\Users\moyuq\.m2\repository\org\knowm\xchart\xchart\3.8.2-SNAPSHOT\xchart-3.8.2-SNAPSHOT.jar;C:\Users\moyuq\.m2\repository\de\erichseifert\vectorgraphics2d\VectorGraphics2D\0.13\VectorGraphics2D-0.13.jar;C:\Users\moyuq\.m2\repository\de\rototor\pdfbox\graphics2d\0.33\graphics2d-0.33.jar;C:\Users\moyuq\.m2\repository\org\apache\pdfbox\pdfbox\2.0.24\pdfbox-2.0.24.jar;C:\Users\moyuq\.m2\repository\org\apache\pdfbox\fontbox\2.0.24\fontbox-2.0.24.jar;C:\Users\moyuq\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;C:\Users\moyuq\.m2\repository\com\madgag\animated-gif-lib\1.4\animated-gif-lib-1.4.jar;"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="user.timezone" value="Europe/London"/>
+    <property name="os.name" value="Windows 10"/>
+    <property name="java.vm.specification.version" value="17"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="CN"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-17.0.2\bin"/>
+    <property name="sun.java.command" value="C:\Users\moyuq\AppData\Local\Temp\surefire12737654287798888847\surefirebooter17195706161715044503.jar C:\Users\moyuq\AppData\Local\Temp\surefire12737654287798888847 2022-03-13T16-07-13_774-jvmRun1 surefire1737124121631418320tmp surefire_011729771625085518028tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="C:\Users\moyuq\Desktop\Dialogue_System\target\test-classes;C:\Users\moyuq\Desktop\Dialogue_System\target\classes;C:\Users\moyuq\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\moyuq\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\moyuq\.m2\repository\org\openjfx\javafx-controls\17.0.2\javafx-controls-17.0.2.jar;C:\Users\moyuq\.m2\repository\org\openjfx\javafx-controls\17.0.2\javafx-controls-17.0.2-win.jar;C:\Users\moyuq\.m2\repository\org\openjfx\javafx-graphics\17.0.2\javafx-graphics-17.0.2.jar;C:\Users\moyuq\.m2\repository\org\openjfx\javafx-graphics\17.0.2\javafx-graphics-17.0.2-win.jar;C:\Users\moyuq\.m2\repository\org\openjfx\javafx-base\17.0.2\javafx-base-17.0.2.jar;C:\Users\moyuq\.m2\repository\org\openjfx\javafx-base\17.0.2\javafx-base-17.0.2-win.jar;C:\Users\moyuq\.m2\repository\org\testng\testng\7.5\testng-7.5.jar;C:\Users\moyuq\.m2\repository\com\google\code\findbugs\jsr305\3.0.1\jsr305-3.0.1.jar;C:\Users\moyuq\.m2\repository\org\slf4j\slf4j-api\1.7.32\slf4j-api-1.7.32.jar;C:\Users\moyuq\.m2\repository\com\beust\jcommander\1.78\jcommander-1.78.jar;C:\Users\moyuq\.m2\repository\org\webjars\jquery\3.5.1\jquery-3.5.1.jar;C:\Users\moyuq\.m2\repository\org\knowm\xchart\xchart\3.8.2-SNAPSHOT\xchart-3.8.2-SNAPSHOT.jar;C:\Users\moyuq\.m2\repository\de\erichseifert\vectorgraphics2d\VectorGraphics2D\0.13\VectorGraphics2D-0.13.jar;C:\Users\moyuq\.m2\repository\de\rototor\pdfbox\graphics2d\0.33\graphics2d-0.33.jar;C:\Users\moyuq\.m2\repository\org\apache\pdfbox\pdfbox\2.0.24\pdfbox-2.0.24.jar;C:\Users\moyuq\.m2\repository\org\apache\pdfbox\fontbox\2.0.24\fontbox-2.0.24.jar;C:\Users\moyuq\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;C:\Users\moyuq\.m2\repository\com\madgag\animated-gif-lib\1.4\animated-gif-lib-1.4.jar;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\moyuq"/>
+    <property name="user.language" value="zh"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2022-01-18"/>
+    <property name="java.home" value="C:\Program Files\Java\jdk-17.0.2"/>
+    <property name="file.separator" value="\"/>
+    <property name="basedir" value="C:\Users\moyuq\Desktop\Dialogue_System"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="C:\Users\moyuq\AppData\Local\Temp\surefire12737654287798888847\surefirebooter17195706161715044503.jar"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="17.0.2+8-86"/>
+    <property name="user.name" value="moyuq"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="GBK"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="localRepository" value="C:\Users\moyuq\.m2\repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="C:\Users\moyuq\AppData\Local\Temp\"/>
+    <property name="java.version" value="17.0.2"/>
+    <property name="user.dir" value="C:\Users\moyuq\Desktop\Dialogue_System"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="native.encoding" value="GBK"/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk-17.0.2\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\Program Files (x86)\VMware\VMware Workstation\bin\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\Git\cmd;C:\Users\moyuq\AppData\Local\Microsoft\WindowsApps;D:\Microsoft VS Code\bin;C:\mingw64\bin;C:\scala\bin;&quot;C:\scala\bin;C:\scala\jre\bin;&quot;;C:\Program Files\CMake\bin;C:\javajdk\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\Oracle\VirtualBox;C:\Program Files\nodejs\;C:\Users\moyuq\AppData\Local\Android\Sdk\platform-tools;C:\Users\moyuq\AppData\Local\Android\Sdk\emulator;C:\Users\moyuq\AppData\Local\Android\Sdk\tools;C:\Users\moyuq\AppData\Local\Android\Sdk\tools\bin;C:\Program Files\swipl\bin;C:\Users\moyuq\Downloads\apache-maven-3.8.1-bin\apache-maven-3.8.1\bin;C:\Program Files\MiKTeX\miktex\bin\x64\;D:\Minikube;C:\Program Files (x86)\NetSarang\Xshell 7\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Python39\;C:\Python39\Scripts\;C:\Python27;C:\Python27\Scripts;C:\Program Files (x86)\Subversion\bin;C:\Strawberry\c\bin;C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;D:\llvm\bin;C:\Program Files\doxygen\bin;D:\JADE\jade-bin\jade\lib\jade.jar;C:\Program Files (x86)\VMware\VMware Workstation\bin\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\Git\cmd;C:\Users\moyuq\AppData\Local\Microsoft\WindowsApps;D:\Microsoft VS Code\bin;C:\mingw64\bin;C:\scala\bin;&quot;C:\scala\bin;C:\scala\jre\bin;&quot;;C:\Program Files\CMake\bin;C:\javajdk\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\Oracle\VirtualBox;C:\Program Files\nodejs\;C:\Users\moyuq\AppData\Local\Android\Sdk\platform-tools;C:\Users\moyuq\AppData\Local\Android\Sdk\emulator;C:\Users\moyuq\AppData\Local\Android\Sdk\tools;C:\Users\moyuq\AppData\Local\Android\Sdk\tools\bin;C:\Program Files\swipl\bin;C:\Users\moyuq\Downloads\apache-maven-3.8.1-bin\apache-maven-3.8.1\bin;C:\Program Files\MiKTeX\miktex\bin\x64\;D:\Minikube;C:\Program Files (x86)\NetSarang\Xshell 7\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\moyuq\AppData\Roaming\cabal\bin;C:\ProgramData\chocolatey\lib\ghc\tools\ghc-8.10.4\bin;C:\Users\moyuq\AppData\Roaming\npm;D:\PyCharm 2021.2.2\bin;D:\IntelliJ IDEA 2021.2.2\bin;C:\Python39;C:\Python39\Scripts;C:\Python27;C:\Python27\Scripts;;."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="17.0.2+8-86"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="61.0"/>
+  </properties>
+  <testcase name="shouldAnswerWithTrue on shouldAnswerWithTrue(org.multiAgent.AppTest)" classname="org.multiAgent.AppTest" time="0.003"/>
+</testsuite>

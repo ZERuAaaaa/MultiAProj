@@ -57,16 +57,10 @@ public class DialogueSystem {
         messager.broadCast(new Move(lastAgent,MoveType.OPEN,topic), lastAgent, agents);
 
         // initialize the model and dvaf of each agent
-        //ArrayList<HashSet<String>> agreeable = new ArrayList<>();
         for (Agent age: agents){
             age.initializeByTopic(topic, getDialogueInfo());
             //agreeable.add(age.getAgreeableAction());
         }
-        //HashSet<String> intersection = agreeable.get(0);
-        //for (int i = 1 ; i < agreeable.size(); i++){
-        //    intersection.retainAll(agreeable.get(i));
-        //}
-        //System.out.println(intersection);
         Integer close = 0;
         while(close == 0){
             for(Agent currentAgent: agents){
@@ -74,9 +68,6 @@ public class DialogueSystem {
                 Move currentMove = currentAgent.Act(messager);
                 messager.broadCast(currentMove, currentAgent, agents);
                 close = messager.checkClose();
-                //System.out.println("\n" + currentAgent.getAgentId());
-                //currentAgent.getDvaf().print();
-                //System.out.println(messager.getLastOne());
                 if(close != 0){
                     break;
                 }
@@ -85,9 +76,103 @@ public class DialogueSystem {
             }
 
         }
+        messager.printLog();
         return close;
     }
 
+    public int[] evaluationRun(String topic){
+        DialogueSystem.topic = topic;
+        // the dialogue opened by the last agent in order
+        Agent lastAgent = agents.get(agents.size() - 1);
+        messager.broadCast(new Move(lastAgent,MoveType.OPEN,topic), lastAgent, agents);
+
+        boolean hasConsensus = false;
+        // initialize the model and dvaf of each agent
+        ArrayList<HashSet<String>> agreeable = new ArrayList<>();
+        for (Agent age: agents){
+            age.initializeByTopic(topic, getDialogueInfo());
+            agreeable.add(age.getAgreeableAction());
+        }
+        HashSet<String> consensus = formConsensus(agreeable);
+        if (!consensus.isEmpty()){
+            hasConsensus = true;
+        }
+
+
+        Integer close = 0;
+        while(close == 0){
+            for(Agent currentAgent: agents){
+                currentAgent.updateModel(getDialoguePossibility());
+                Move currentMove = currentAgent.Act(messager);
+                messager.broadCast(currentMove, currentAgent, agents);
+                close = messager.checkClose();
+                if(close != 0){
+                    break;
+                }
+
+                counter++;
+            }
+
+        }
+        String output = ((String) messager.getLastOne().getContent());
+        boolean hasSucessOutput = close != -1;
+        HashSet<String> temp = new HashSet<>();
+        temp.add(output);
+        // dialogueScore
+        int dialogueScore;
+        if (!hasSucessOutput){
+            dialogueScore = 0;
+        }else{
+             dialogueScore = calculateScore(agreeable, temp);
+        }
+        // consensusScore
+        int consensusScore = calculateScore(agreeable, consensus);
+        // length of dialogue
+        int dialogueLength = counter;
+
+        int[] data = new int[5];
+        data[0] = dialogueLength;
+        data[1] = hasSucessOutput ? 1 : 0;
+        data[2] = hasConsensus ? 1 : 0;
+        data[3] = dialogueScore;
+        data[4] = consensusScore;
+        return data;
+    }
+
+    public HashSet<String> formConsensus(ArrayList<HashSet<String>> agreeable){
+        HashSet<String> consensus = agreeable.get(0);
+        for (int i = 1 ; i < agreeable.size(); i++){
+            consensus.retainAll(agreeable.get(i));
+        }
+        return consensus;
+    }
+
+    public Integer calculateScore(ArrayList<HashSet<String>> agreeable, HashSet<String> dialogueOutput){
+        int max = Integer.MIN_VALUE;
+        if (dialogueOutput.isEmpty()){
+            return 0;
+        }
+        for (String output : dialogueOutput){
+            for (HashSet<String> agr: agreeable){
+                boolean allAgree = true;
+                boolean someAgree = false;
+                if(!agr.contains(output)){
+                    allAgree = false;
+                }
+                if (agr.contains(output)){
+                    someAgree = true;
+                }
+                if (allAgree){
+                    max = Math.max(max, 3);
+                }else if (someAgree){
+                    max = Math.max(max, 2);
+                }else{
+                    max = Math.max(max , 1);
+                }
+            }
+        }
+        return max;
+    }
     /**
      * return the information of the dialogue, agents and their audiences
      * @return info
