@@ -93,9 +93,9 @@ public class App{
                             consensusScoreB += consensusScore1;
                         }
                         writeText.newLine();
-                        writeText.write(AGENTS + "," + VALUES +","+ ACTIONS+"," + ARGUMENTS +","+ lengthA / ROUNDS+"," + dialogueSucessA / ROUNDS+"," + consensusSucessA / ROUNDS+"," + dialogueScoreA / ROUNDS+"," +  consensusScoreA / ROUNDS);
+                        writeText.write(AGENTS + "," + VALUES +","+ ACTIONS+"," + ARGUMENTS +","+ lengthA / dialogueSucessA+"," + dialogueSucessA / ROUNDS+"," + consensusSucessA / ROUNDS+"," + dialogueScoreA / ROUNDS+"," +  consensusScoreA / ROUNDS);
                         writeText1.newLine();
-                        writeText1.write(AGENTS + "," +VALUES +","+ ACTIONS+"," + ARGUMENTS +","+ lengthB / ROUNDS+"," + dialogueSucessB / ROUNDS+"," + consensusSucessB / ROUNDS+"," + dialogueScoreB / ROUNDS+"," +  consensusScoreB / ROUNDS);
+                        writeText1.write(AGENTS + "," +VALUES +","+ ACTIONS+"," + ARGUMENTS +","+ lengthB / dialogueSucessB+"," + dialogueSucessB / ROUNDS+"," + consensusSucessB / ROUNDS+"," + dialogueScoreB / ROUNDS+"," +  consensusScoreB / ROUNDS);
                     }
                 }
             }

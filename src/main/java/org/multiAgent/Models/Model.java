@@ -11,4 +11,6 @@ public interface Model {
     public void update(HashMap<Agent, HashMap<String, Float>> possibility);
     public HashMap<String, Float> getPossibility();
     public HashMap<String, Float> getDistribution();
+    public void demote(String self, String other, float strengh);
+    public void promote(String self);
 }

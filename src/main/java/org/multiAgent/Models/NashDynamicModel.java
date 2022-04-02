@@ -6,14 +6,14 @@ import org.multiAgent.Agent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class NashDynamicModel implements Model{
 
     ArrayList<Agent> agents;
     HashMap<Agent, HashMap<String, Integer>> audiences;
 
-    HashMap<String, Float> selfPayoff = new HashMap<>();
-    HashMap<String, Float> dialoguePayoff = new HashMap<>();
+    Matric matric;
 
     HashMap<String, Float> selfPossibility = new HashMap<>();
     HashMap<String, Float> dialoguePossibility = new HashMap<>();
@@ -22,10 +22,33 @@ public class NashDynamicModel implements Model{
     public NashDynamicModel() {}
 
     public void initialize(Pair<ArrayList<Agent>, HashMap<Agent, HashMap<String, Integer>>> dialogueInfo, Agent self){
+        HashMap<String, Float> selfPayoff = new HashMap<>();
+        HashMap<String, Float> dialoguePayoff = new HashMap<>();
+
         this.agents = dialogueInfo.getKey();
         this.audiences = dialogueInfo.getValue();
         this.self = self;
-        buildPayoffMatrix();
+        for (Map.Entry<String, Integer> entry : audiences.get(self).entrySet()){
+            selfPayoff.put(entry.getKey(), (float) entry.getValue());
+        }
+
+        for(Agent age : agents){
+            if(age != self){
+                HashMap<String, Integer> map = audiences.get(age);
+                for(Map.Entry<String, Integer> entry: map.entrySet()){
+                    if (dialoguePayoff.containsKey(entry.getKey())){
+                        dialoguePayoff.put(entry.getKey(), dialoguePayoff.get(entry.getKey()) + entry.getValue());
+                    }else{
+                        dialoguePayoff.put(entry.getKey(),(float) entry.getValue());
+                    }
+                }
+            }
+        }
+
+        dialoguePayoff.replaceAll((k, v) -> v / (agents.size() - 1));
+
+        matric = new Matric(selfPayoff, dialoguePayoff);
+
         for (Map.Entry<String, Float> entry: selfPayoff.entrySet()){
            selfPossibility.put(entry.getKey(),  (float) 1 / selfPayoff.size());
         }
@@ -47,49 +70,36 @@ public class NashDynamicModel implements Model{
         dialoguePossibility.replaceAll((k, v) -> v / (agents.size() - 1));
 
         HashMap<String, Float> expectedUtilities = new HashMap<>();
-        for (Map.Entry<String, Float> selfP: selfPayoff.entrySet()){
-            float expect = 0;
-            for (Map.Entry<String, Float> DP: dialoguePossibility.entrySet()){
-                expect += selfP.getValue() * DP.getValue();
+
+        Set<String> audience = audiences.get(self).keySet();
+        HashMap<String,HashMap<String, float[]>> payOffMatric = matric.getMatric();
+        for (String aud: audience){
+            HashMap<String, float[]> row = payOffMatric.get(aud);
+            float sum = 0;
+            for (Map.Entry<String, float[]> ele: row.entrySet()){
+                sum += dialoguePossibility.get(ele.getKey()) * ele.getValue()[0];
             }
-            expectedUtilities.put(selfP.getKey(), expect);
+            expectedUtilities.put(aud,sum);
         }
+
         float SQ = 0;
-        for (Map.Entry<String, Float> SP: selfPossibility.entrySet()){
-            for (Map.Entry<String, Float> EU: expectedUtilities.entrySet()){
-                if (SP.getKey().equals(EU.getKey())){
-                    SQ += SP.getValue() * EU.getValue();
-                }
-            }
+
+        for (Map.Entry<String, Float> entry: expectedUtilities.entrySet()){
+            SQ += selfPossibility.get(entry.getKey()) * entry.getValue();
         }
-        HashMap<String, Float> cov = new HashMap<>();
+
+        float finalSQ = SQ;
+        expectedUtilities.forEach((x, y) -> y = Math.max(y - finalSQ,0));
+
+        HashMap<String, Float> finalCov = expectedUtilities;
+
         float covSum = 0;
-        for (Map.Entry<String, Float> EU : expectedUtilities.entrySet()){
-            float temp = Math.max(EU.getValue() - SQ, 0);
-            covSum += temp;
-            cov.put(EU.getKey(), temp);
+        for (Map.Entry<String,Float> co: finalCov.entrySet()){
+            covSum += co.getValue();
         }
         float finalCovSum = covSum;
-        selfPossibility.replaceAll((k , v) -> (float) Math.round((selfPossibility.get(k) + cov.get(k)) / (1 + finalCovSum) * 1000) / 1000);
-    }
 
-    public void buildPayoffMatrix(){
-        for (Map.Entry<String, Integer> entry : audiences.get(self).entrySet()){
-            selfPayoff.put(entry.getKey(), (float) entry.getValue());
-        }
-        for(Agent age : agents){
-            if(age != self){
-                HashMap<String, Integer> map = audiences.get(age);
-                for(Map.Entry<String, Integer> entry: map.entrySet()){
-                    if (dialoguePayoff.containsKey(entry.getKey())){
-                        dialoguePayoff.put(entry.getKey(), dialoguePayoff.get(entry.getKey()) + entry.getValue());
-                    }else{
-                        dialoguePayoff.put(entry.getKey(),(float) entry.getValue());
-                    }
-                }
-            }
-        }
-        dialoguePayoff.replaceAll((k, v) -> v / (agents.size() - 1));
+        selfPossibility.replaceAll((k , v) -> (float) Math.round((selfPossibility.get(k) + finalCov.get(k)) / (1 + finalCovSum) * 1000) / 1000);
     }
 
 
@@ -100,4 +110,15 @@ public class NashDynamicModel implements Model{
     public HashMap<String, Float> getDistribution(){
         return this.selfPossibility;
     }
+
+    @Override
+    public void demote(String self, String other, float strengh) {
+        matric.demote(self,other,strengh);
+    }
+
+    @Override
+    public void promote(String self) {
+        matric.promote(self);
+    }
+
 }

@@ -1,0 +1,27 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Dialogue_System:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Dialogue_System_jar</output-path>
+    <root id="archive" name="Dialogue_System.jar">
+      <element id="module-output" name="Dialogue_System" />
+      <element id="extracted-dir" path="D:/apache-maven-3.8.3-repo/org/openjfx/javafx-graphics/17.0.2/javafx-graphics-17.0.2-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-maven-3.8.3-repo/com/beust/jcommander/1.78/jcommander-1.78.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-maven-3.8.3-repo/org/slf4j/slf4j-api/1.7.32/slf4j-api-1.7.32.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-maven-3.8.3-repo/org/openjfx/javafx-base/17.0.2/javafx-base-17.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-maven-3.8.3-repo/com/google/code/findbugs/jsr305/3.0.1/jsr305-3.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-maven-3.8.3-repo/org/openjfx/javafx-base/17.0.2/javafx-base-17.0.2-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-maven-3.8.3-repo/org/openjfx/javafx-controls/17.0.2/javafx-controls-17.0.2-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-maven-3.8.3-repo/org/webjars/jquery/3.5.1/jquery-3.5.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-maven-3.8.3-repo/org/openjfx/javafx-graphics/17.0.2/javafx-graphics-17.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-maven-3.8.3-repo/org/openjfx/javafx-controls/17.0.2/javafx-controls-17.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-maven-3.8.3-repo/org/testng/testng/7.5/testng-7.5.jar" path-in-jar="/" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:17.0.2" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:win:17.0.2" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:17.0.2" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:17.0.2" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:win:17.0.2" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:win:17.0.2" />
+      <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.32" />
+      <element id="library" level="project" name="Maven: org.testng:testng:7.5" />
+    </root>
+  </artifact>
+</component>

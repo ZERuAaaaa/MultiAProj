@@ -325,17 +325,6 @@ public class IVAF {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
     private ArrayList<Argument> getAttackers(Argument a){
         ArrayList<Argument> attackers = new ArrayList<>();
         for(Attack attack: defeatRelationship){

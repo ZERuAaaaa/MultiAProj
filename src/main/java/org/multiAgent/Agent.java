@@ -59,12 +59,30 @@ public class Agent {
         dvaf = new IVAF(arguments, audiences);
     }
 
+    public ArrayList<Argument> getArguments(){
+        return arguments;
+    }
+
+    public HashMap<String, Integer> getAudience(){
+        return audiences;
+    }
     /**
      * the dialogue trigger the agent to act each round during the deliberation
      * @param messager a messager record all logs during the deliberation
      * @return the action an agent choosen
      */
     public Move Act(Messager messager){
+        ArrayList<Object[]> demoteList = messager.checkDemote(this, 0.5F);
+        if (demoteList.isEmpty()){
+
+        }else if(demoteList.get(0).length == 1){
+            model.promote((String) demoteList.get(0)[0]);
+        }else{
+            for (Object[] obj : demoteList) {
+                model.demote((String) obj[0], (String) obj[1],(float) obj[2]);
+            }
+        }
+
         ArrayList<Argument> agreeable = getAgreeable();
         ArrayList<Argument> agreeableMoves = getAgreeable1(agreeable);
         HashSet<Move>[] availableMoves = protocol(messager);
@@ -135,6 +153,10 @@ public class Agent {
             }
         }
         return agreeable;
+    }
+
+    public HashMap<String, Integer> getAudiences(){
+        return audiences;
     }
 
     public HashSet<String> getAgreeableAction(){

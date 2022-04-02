@@ -5,10 +5,7 @@ import org.multiAgent.DialogueSystem;
 import org.multiAgent.IVAFramework.Argument;
 import org.multiAgent.IVAFramework.Sign;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Messager {
 
@@ -141,6 +138,44 @@ public class Messager {
             }
         }
         return canAgree;
+    }
+
+    public ArrayList<Object[]> checkDemote(Agent agent, float Magnification){
+        boolean demote = false;
+        ArrayList<Object[]> temp = new ArrayList<>();
+        if (messageLog.size() < Agent.AgentCounter){
+            return temp;
+        }else{
+            Integer position = messageLog.size()- Agent.AgentCounter;
+            Move previous = messageLog.get(position);
+            if (previous.getType() == MoveType.ASSERT){
+                Argument pre = (Argument) previous.getContent();
+                if (previous.getSender() == agent && pre.getSign() == Sign.POSITIVE){
+                    for (int i = position + 1; i < messageLog.size(); i++){
+                        Move currentMove = messageLog.get(i);
+                        if (currentMove.getSender() != agent && currentMove.getType() == MoveType.ASSERT){
+                            Argument currentArgument = (Argument) currentMove.getContent();
+                            if (currentArgument.getSign() == Sign.NEGATIVE && currentArgument.getAct().equals(pre.getAct())){
+                                demote = true;
+                                HashMap<String, Integer> audience = currentMove.getSender().getAudiences();
+                                Object[] demotes = new Object[3];
+                                demotes[0] = pre.getAudience();
+                                demotes[1] = currentArgument.getAudience();
+                                demotes[2] = Magnification * audience.get(currentArgument.getAudience());
+                                temp.add(demotes);
+                            }
+                        }
+                    }
+                }
+                if (!demote){
+                    Object[] promotes = new Object[1];
+                    promotes[0] = ((Argument) previous.getContent()).getAct();
+                    temp.add(promotes);
+                }
+            }
+
+        }
+        return temp;
     }
 
 
