@@ -47,9 +47,9 @@ public class evaluation {
                         float consensusScoreB = 0;
 
                         for (int e = 0; e <  ROUNDS; e++){
-                            RandomGenerator generator = new RandomGenerator(AGENTS);
+                            RandomGenerator generator = new RandomGenerator();
                             DialogueSystem dialogue = new DialogueSystem();
-                            Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String, Integer>>> temp = generator.getByAgent(ACTIONS, ARGUMENTS, VALUES);
+                            Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String, Integer>>> temp = generator.getByAgent(AGENTS,ACTIONS, VALUES, ARGUMENTS);
                             ArrayList<ArrayList<Argument>> arguments = temp.getKey();
                             ArrayList<HashMap<String, Integer>> audiences = temp.getValue();
                             NashDynamicModel nashModel = new NashDynamicModel();

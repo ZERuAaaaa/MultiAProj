@@ -18,7 +18,7 @@ public class runTimeEvaluation {
 
     public static void main(String[] args) throws Exception{
 
-        int ROUNDS = 10;
+        int ROUNDS = 200;
         File writeFile = new File("data/TimeEvaluation/TimeEvaluation.csv");
 
         BufferedWriter writeText = new BufferedWriter(new FileWriter(writeFile));
@@ -32,9 +32,9 @@ public class runTimeEvaluation {
                         System.out.println(VALUES + " " + ACTIONS + " " + ARGUMENTS);
                         long totaltime = 0;
                         for (int e = 0; e <  ROUNDS; e++){
-                            RandomGenerator generator = new RandomGenerator(AGENTS);
+                            RandomGenerator generator = new RandomGenerator();
                             DialogueSystem dialogue = new DialogueSystem();
-                            Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String, Integer>>> temp = generator.getByAgent(ACTIONS, ARGUMENTS, VALUES);
+                            Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String, Integer>>> temp = generator.getByAgent(AGENTS,ACTIONS, VALUES, ARGUMENTS);
                             ArrayList<ArrayList<Argument>> arguments = temp.getKey();
                             ArrayList<HashMap<String, Integer>> audiences = temp.getValue();
 
@@ -47,7 +47,7 @@ public class runTimeEvaluation {
                             long startTime = System.currentTimeMillis();
                             dialogue.run("topic");
                             long endTime = System.currentTimeMillis();
-                            long time = (endTime - startTime) / 1000;
+                            long time = endTime - startTime;
 
                             totaltime += time;
 

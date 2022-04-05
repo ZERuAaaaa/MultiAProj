@@ -11,9 +11,9 @@ public class RandomGenerator {
     HashSet<String> audiences = new HashSet<>();
     Pair<ArrayList<String>, ArrayList<Argument>> generated;
 
-    int agentNum = 0;
-    public RandomGenerator(int number){
-        agentNum = number;
+    int agentNum = 2;
+    public RandomGenerator(){
+
     }
 
     public void print(){
@@ -24,8 +24,9 @@ public class RandomGenerator {
             System.out.println(aud);
         }
     }
-    public Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String, Integer>>> getByAgent(int actionNumber, int argumentNumber,int valueNumber){
+    public Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String, Integer>>> getByAgent(int number, int actionNumber, int valueNumber ,int argumentNumber){
         for(int i = 0; i < argumentNumber; i++){
+            agentNum = number;
             String newAction = generateAction(actionNumber);
             String newSign = generateSign();
             String newAudience = generateAudience(valueNumber);

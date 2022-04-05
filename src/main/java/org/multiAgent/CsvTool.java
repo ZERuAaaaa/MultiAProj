@@ -8,8 +8,8 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class csvLoader {
-    public csvLoader(){}
+public class CsvTool {
+    public CsvTool(){}
 
     public Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String,Integer>>> loadForCsv(String url) throws Exception{
         CSVReader reader = new CSVReader(new FileReader(url));
@@ -31,7 +31,6 @@ public class csvLoader {
                 String[] current = reader.readNext();
                 String action = current[0];
                 String goal = current[1];
-                System.out.println(current[2]);
                 String value = current[2];
                 String sign = current[3];
                 Argument arg = new Argument(action,goal,sign,value);
@@ -41,5 +40,9 @@ public class csvLoader {
         }
 
         return new Pair<>(AgentArguemnts,maps);
+    }
+
+    public void writeCsv(Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String,Integer>>> data){
+
     }
 }

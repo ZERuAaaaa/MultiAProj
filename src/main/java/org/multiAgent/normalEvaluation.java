@@ -19,7 +19,7 @@ public class normalEvaluation {
 
     public static void main(String[] args) throws Exception{
 
-        int ROUNDS = 1000;
+        int ROUNDS = 500;
         File writeFile = new File("data/normalEvaluation/normalEvaluation.csv");
 
         BufferedWriter writeText = new BufferedWriter(new FileWriter(writeFile));
@@ -45,9 +45,9 @@ public class normalEvaluation {
 
 
                         for (int e = 0; e <  ROUNDS; e++){
-                            RandomGenerator generator = new RandomGenerator(AGENTS);
+                            RandomGenerator generator = new RandomGenerator();
                             DialogueSystem dialogue = new DialogueSystem();
-                            Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String, Integer>>> temp = generator.getByAgent(ACTIONS, ARGUMENTS, VALUES);
+                            Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String, Integer>>> temp = generator.getByAgent(AGENTS,ACTIONS,VALUES,ARGUMENTS);
                             ArrayList<ArrayList<Argument>> arguments = temp.getKey();
                             ArrayList<HashMap<String, Integer>> audiences = temp.getValue();
 

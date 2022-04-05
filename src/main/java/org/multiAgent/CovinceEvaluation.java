@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class CovinceEvaluation {
     public static void main(String[] args) throws IOException {
-        int ROUNDS = 1000;
+        int ROUNDS = 500;
         File writeFile = new File("data/CovinceEvaluation/NashDynamic.csv");
         File writeFile1 = new File("data/CovinceEvaluation/Random.csv");
         File writeFile2 = new File("data/CovinceEvaluation/SocialWelfare.csv");
@@ -54,9 +54,9 @@ public class CovinceEvaluation {
                         float totalRank2 = 0;
 
                         for (int z = 0; z < ROUNDS ; z ++){
-                            RandomGenerator generator = new RandomGenerator(2);
+                            RandomGenerator generator = new RandomGenerator();
                             DialogueSystem dialogue = new DialogueSystem();
-                            Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String, Integer>>> temp = generator.getByAgent(ACTIONS, ARGUMENTS, VALUES);
+                            Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String, Integer>>> temp = generator.getByAgent(2,ACTIONS, VALUES,ARGUMENTS);
                             ArrayList<ArrayList<Argument>> arguments = temp.getKey();
                             ArrayList<HashMap<String, Integer>> audiences = temp.getValue();
 
@@ -123,13 +123,13 @@ public class CovinceEvaluation {
 
                         }
                         writeText.newLine();
-                        writeText.write(AGENTS + "," + ACTIONS+ "," +VALUES + "," + ARGUMENTS + "," + AverageLengthR / RandomSuccess + "," + RandomSuccess / ROUNDS + "," + RandomCovince / RandomSuccess +  "," + (RandomRank / totalRank)/ VALUES);
+                        writeText.write(AGENTS + "," + ACTIONS+ "," +VALUES + "," + ARGUMENTS + "," + AverageLengthR / ROUNDS + "," + RandomSuccess / ROUNDS + "," + RandomCovince / RandomSuccess +  "," + (RandomRank / totalRank)/ VALUES);
 
                         writeText1.newLine();
-                        writeText1.write(AGENTS + "," + ACTIONS+ "," +VALUES + "," + ARGUMENTS + "," + AverageLengthN / NashSuccess + "," + NashSuccess / ROUNDS + "," + NashCovince / NashSuccess +  "," + (NashRank / totalRank1)/ VALUES);
+                        writeText1.write(AGENTS + "," + ACTIONS+ "," +VALUES + "," + ARGUMENTS + "," + AverageLengthN / ROUNDS + "," + NashSuccess / ROUNDS + "," + NashCovince / NashSuccess +  "," + (NashRank / totalRank1)/ VALUES);
 
                         writeText2.newLine();
-                        writeText2.write(AGENTS + "," + ACTIONS+ "," +VALUES + "," + ARGUMENTS + "," + AverageLengthS / SocialSuccess + "," + SocialSuccess / ROUNDS + "," + SocialCovince / NashSuccess +  "," + (SocialRank / totalRank2)/ VALUES);}
+                        writeText2.write(AGENTS + "," + ACTIONS+ "," +VALUES + "," + ARGUMENTS + "," + AverageLengthS / ROUNDS + "," + SocialSuccess / ROUNDS + "," + SocialCovince / NashSuccess +  "," + (SocialRank / totalRank2)/ VALUES);}
                 }
             }
         }
