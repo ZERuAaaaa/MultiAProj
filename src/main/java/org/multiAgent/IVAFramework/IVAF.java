@@ -5,19 +5,27 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Stand for instantiated value-based argumentation framework,
+ * an iVAF is used to determine the conflict between arguments of
+ * an agent.
+ */
 public class IVAF {
-    private ArrayList<Argument> arguments;
 
+    private ArrayList<Argument> arguments;
     private HashMap<String, Integer> audiences;
 
     private ArrayList<Attack> relationship = new ArrayList<>();
-
     private ArrayList<Attack> defeatRelationship = new ArrayList<>();
 
     public ArrayList<Argument>[] labelings = new ArrayList[3];
-
     public ArrayList<ArrayList<Argument>> candidate_labellings = new ArrayList<>();
 
+    /**
+     * Constructor of ivaf
+     * @param arguments arguments
+     * @param audiences audiences
+     */
     public IVAF(ArrayList<Argument> arguments, HashMap<String, Integer> audiences){
         for (int i = 0; i < labelings.length; i++){
             labelings[i] = new ArrayList<>();
@@ -31,19 +39,22 @@ public class IVAF {
         setRelationship();
     }
 
+    /**
+     * use to assert new argument to the agent's ivaf
+     * @param argument new argument
+     */
     public void insertArgument(Argument argument){
         arguments.add(argument);
         relationship.clear();
         setRelationship();
     }
-
-    public void initializeIVAF(){
-        setRelationship();
-    }
-
+    /**
+     * print the ivaf of an agent
+     */
     public void print(){
         for(Argument arg: arguments){
-            System.out.println(arg.getAct() + " " + arg.getAudience() +" " + arg.getGoal() + " " + (arg.getSign().isPositive()? "+" : "-") + " " + audiences.get(arg.getAudience()));
+            System.out.println(arg.getAct() + " " + arg.getAudience() +" " + arg.getGoal() + " " +
+                    (arg.getSign().isPositive()? "+" : "-") + " " + audiences.get(arg.getAudience()));
         }
         for(Attack atc: defeatRelationship){
             Argument attacker = atc.getAttacker();
@@ -60,15 +71,8 @@ public class IVAF {
                     + (attacked.getSign().isPositive() ? "+" : "-") + " "
                     + AudienceA2);
         }
-//        ArrayList<Argument> acceptableArguments = getPreferredExtension();
-//        for(Argument arg : acceptableArguments){
-//            System.out.println("{" + arg.getAct()
-//                    + " " + arg.getAudience()
-//                    + " " + arg.getSign()
-//                    + " " + audiences.get(arg.getAudience())
-//                    + "}");
-//        }
     }
+
     /**
      * generate relationship from existing arguments and audience after the audience are set
      */
@@ -133,17 +137,16 @@ public class IVAF {
         }
     }
 
-
+    /**
+     * recursively find a preferred extension of the agent's iVAF
+     * @param labeling labelling of arguments
+     */
     public void find_labellings(ArrayList<Argument>[] labeling){
         if (isCandidateSubset(labeling[0])){
             return;
         }
         if(getIllegalIN(labeling).isEmpty()){
-            for (ArrayList<Argument> arg: candidate_labellings){
-                if (isSubSet(arg, labeling[0])){
-                    candidate_labellings.remove(arg);
-                }
-            }
+            candidate_labellings.removeIf(arg -> isSubSet(arg, labeling[0]));
             candidate_labellings.add(labeling[0]);
             return;
         }else{
@@ -159,6 +162,10 @@ public class IVAF {
         }
     }
 
+    /**
+     * return the preferred extension from agent's ivaf determined by labelling approach
+     * @return preferred extension
+     */
     public ArrayList<Argument> getPreferredExtension(){
         for (ArrayList<Argument> list: labelings){
             list.clear();
@@ -171,6 +178,12 @@ public class IVAF {
         return candidate_labellings.get(0);
     }
 
+    /**
+     * perform a transition step of labeling approach
+     * @param x a specific argument
+     * @param labelin current labeling
+     * @return new labelling
+     */
     public ArrayList<Argument>[] transition_step(Argument x, ArrayList<Argument>[] labelin){
          ArrayList<Argument>[] labeling = labelin;
          moveArgument(labelin, x,0,1);
@@ -181,6 +194,12 @@ public class IVAF {
          return labeling;
     }
 
+    /**
+     * check whether an argument is legally in
+     * @param argument a specific argument
+     * @param labeling current labeling
+     * @return boolean
+     */
     public boolean isLegallyIN(Argument argument, ArrayList<Argument>[] labeling){
         if(labeling[0].contains(argument)){
             ArrayList<Argument> attackers = getAttackers(argument);
@@ -194,6 +213,12 @@ public class IVAF {
         return false;
     }
 
+    /**
+     * check whether an argument is super legally in
+     * @param argument a specific argument
+     * @param labeling current labeling
+     * @return boolean
+     */
     public boolean isSuperIllegallyIN(Argument argument, ArrayList<Argument>[] labeling){
         if (labeling[0].contains(argument)){
             ArrayList<Argument> attackers = getAttackers(argument);
@@ -206,6 +231,12 @@ public class IVAF {
         return false;
     }
 
+    /**
+     * check whether an argument is super legally out
+     * @param argument a specific argument
+     * @param labeling current labeling
+     * @return boolean
+     */
     public boolean isLegallyOUT(Argument argument, ArrayList<Argument>[] labeling){
         if (labeling[1].contains(argument)){
             ArrayList<Argument> attackers = getAttackers(argument);
@@ -218,6 +249,12 @@ public class IVAF {
         return false;
     }
 
+    /**
+     * check whether an argument is legally undec
+     * @param argument a specific argument
+     * @param labeling current labeling
+     * @return boolean
+     */
     public boolean isLegallyUNDEC(Argument argument, ArrayList<Argument>[] labeling){
         if (labeling[2].contains(argument)){
             ArrayList<Argument> attackers = getAttackers(argument);
@@ -236,34 +273,23 @@ public class IVAF {
         return false;
     }
 
+    /**
+     * move argument between different labellings
+     * @param labeling current labeling
+     * @param argument a specific argument
+     * @param from labelling
+     * @param to target labelling
+     */
     public void moveArgument(ArrayList<Argument>[] labeling ,Argument argument, int from, int to){
         labeling[from].remove(argument);
         labeling[to].add(argument);
     }
 
-    public boolean isLabelingAdmissible(ArrayList<Argument>[] labeling){
-        for(Argument arg: labeling[0]){
-            if(!isLegallyIN(arg, labeling)){
-                return false;
-            }
-        }
-        for(Argument arg: labeling[1]){
-            if(!isLegallyOUT(arg, labeling)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean isLabelingComplete(ArrayList<Argument>[] labeling){
-        for(Argument arg: labelings[2]){
-            if(!isLegallyUNDEC(arg, labeling)){
-                return false;
-            }
-        }
-        return true;
-    }
-
+    /**
+     * get all arguments labelled legal super illegal in
+     * @param labeling labeling
+     * @return list of arguments
+     */
     public ArrayList<Argument> getSuperIllegalIN(ArrayList<Argument>[] labeling){
         ArrayList<Argument> out = new ArrayList<>();
         for (Argument arg: labeling[0]){
@@ -274,6 +300,11 @@ public class IVAF {
         return out;
     }
 
+    /**
+     * get all arguments labelled legal in
+     * @param labeling current labeling
+     * @return list of arguments
+     */
     public ArrayList<Argument> getIllegalIN(ArrayList<Argument>[] labeling){
         ArrayList<Argument> out = new ArrayList<>();
         for (Argument arg: labeling[0]){
@@ -284,6 +315,11 @@ public class IVAF {
         return out;
     }
 
+    /**
+     * get all arguments labelled legal INP
+     * @param labeling current labeling
+     * @return list of arguments
+     */
     public ArrayList<Argument> getIllegalINP(ArrayList<Argument>[] labeling){
         ArrayList<Argument> out = getSuperIllegalIN(labeling);
         ArrayList<Argument> temp = getIllegalIN(labeling);
@@ -295,6 +331,11 @@ public class IVAF {
         return out;
     }
 
+    /**
+     * get all arguments labelled legally out
+     * @param labeling current labeling
+     * @return list of arguments
+     */
     public ArrayList<Argument> getIllegalOUT(ArrayList<Argument>[] labeling){
         ArrayList<Argument> out = new ArrayList<>();
         for (Argument arg: labeling[1]){
@@ -305,6 +346,12 @@ public class IVAF {
         return out;
     }
 
+    /**
+     * check whether list A is subset of list B
+     * @param child child list
+     * @param parent parent list
+     * @return boolean
+     */
     public boolean isSubSet(ArrayList<Argument> child, ArrayList<Argument> parent){
         for (Argument arg: child){
             if (!parent.contains(arg)){
@@ -314,7 +361,11 @@ public class IVAF {
         return true;
     }
 
-
+    /**
+     * check whether a set of argument is a candidate subset
+     * @param child set of arugments
+     * @return boolean
+     */
     public boolean isCandidateSubset(ArrayList<Argument> child){
         for (ArrayList<Argument> e: candidate_labellings){
             if(isSubSet(child, e)){
@@ -324,7 +375,11 @@ public class IVAF {
         return false;
     }
 
-
+    /**
+     * get all arguments that attacking argument a
+     * @param a argument
+     * @return set of arguments
+     */
     private ArrayList<Argument> getAttackers(Argument a){
         ArrayList<Argument> attackers = new ArrayList<>();
         for(Attack attack: defeatRelationship){
@@ -335,58 +390,6 @@ public class IVAF {
         return attackers;
     }
 
-    public boolean isAcceptable(Argument a){
-        ArrayList<Argument> attackers = getAttackers(a);
-        if (attackers.isEmpty()){
-            return true;
-        }
-        for(Argument oneAttacker: attackers){
-            ArrayList<Argument> againstAttackers = getAttackers(oneAttacker);
-            for (Argument againstAttacker: againstAttackers){
-                if(defeat(againstAttacker, oneAttacker)){
-                    return true;
-                }
-            }
-        }
-        return false;
-
-    }
-
-    public Boolean isConflictFree(ArrayList<Argument> subset){
-        for(int x = 0; x < subset.size(); x++){
-            for(int y = 0; y < subset.size(); y++){
-                Argument attacker = subset.get(x);
-                Argument attacked = subset.get(y);
-                for(Attack atc: relationship){
-                    if(atc.attacker == attacker && atc.attacked == attacked){
-                        if(x != y && defeat(attacker, attacked)){
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
-
-    private Boolean isAdmissible(ArrayList<Argument> subset){
-        if(isConflictFree(subset)){
-            for(Argument a: subset){
-                if(!isAcceptable(a)){
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        return false;
-    }
-
-    public void insert(Argument argument){
-        arguments.add(argument);
-        setRelationship();
-    }
     /**
      * return IVAFTuple of an agent
      * @return <X, A>

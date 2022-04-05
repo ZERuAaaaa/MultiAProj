@@ -8,12 +8,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * This class implemented a model using nash dynamic approach to update
+ * with respect of other agents audiences and possibility of choosing actions
+ */
 public class NashDynamicModel implements Model{
 
     ArrayList<Agent> agents;
     HashMap<Agent, HashMap<String, Integer>> audiences;
 
-    Matric matric;
+    Matrix matrix;
 
     HashMap<String, Float> selfPossibility = new HashMap<>();
     HashMap<String, Float> dialoguePossibility = new HashMap<>();
@@ -21,7 +25,15 @@ public class NashDynamicModel implements Model{
 
     public NashDynamicModel() {}
 
-    public void initialize(Pair<ArrayList<Agent>, HashMap<Agent, HashMap<String, Integer>>> dialogueInfo, Agent self){
+  /**
+   * agent initialize its model at the beginning of the dialogue with * information of other agents'
+   * audiences
+   * @param dialogueInfo agents information within the dialogue
+   * @param self agent
+   */
+  @Override
+  public void initialize(
+      Pair<ArrayList<Agent>, HashMap<Agent, HashMap<String, Integer>>> dialogueInfo, Agent self) {
         HashMap<String, Float> selfPayoff = new HashMap<>();
         HashMap<String, Float> dialoguePayoff = new HashMap<>();
 
@@ -47,20 +59,26 @@ public class NashDynamicModel implements Model{
 
         dialoguePayoff.replaceAll((k, v) -> v / (agents.size() - 1));
 
-        matric = new Matric(selfPayoff, dialoguePayoff);
+        matrix = new Matrix(selfPayoff, dialoguePayoff);
 
         for (Map.Entry<String, Float> entry: selfPayoff.entrySet()){
            selfPossibility.put(entry.getKey(),  (float) 1 / selfPayoff.size());
         }
     }
 
+    /**
+     * update the model at the agent's turn according to other agents' information
+     * @param possibility possibility of other agent choosing values
+     */
+    @Override
     public void update(HashMap<Agent, HashMap<String, Float>> possibility){
         dialoguePossibility.clear();
         for (Map.Entry<Agent, HashMap<String, Float>> obj: possibility.entrySet()){
             if(obj.getKey() != self){
                 for (Map.Entry<String, Float> entry: obj.getValue().entrySet()){
                     if (dialoguePossibility.containsKey(entry.getKey())){
-                        dialoguePossibility.put(entry.getKey(), dialoguePossibility.get(entry.getKey()) + entry.getValue());
+                        dialoguePossibility.put(entry.getKey(),
+                                dialoguePossibility.get(entry.getKey()) + entry.getValue());
                     }else{
                         dialoguePossibility.put(entry.getKey(), entry.getValue());
                     }
@@ -72,7 +90,7 @@ public class NashDynamicModel implements Model{
         HashMap<String, Float> expectedUtilities = new HashMap<>();
 
         Set<String> audience = audiences.get(self).keySet();
-        HashMap<String,HashMap<String, float[]>> payOffMatric = matric.getMatric();
+        HashMap<String,HashMap<String, float[]>> payOffMatric = matrix.getMatric();
         for (String aud: audience){
             HashMap<String, float[]> row = payOffMatric.get(aud);
             float sum = 0;
@@ -91,34 +109,47 @@ public class NashDynamicModel implements Model{
         float finalSQ = SQ;
         expectedUtilities.forEach((x, y) -> y = Math.max(y - finalSQ,0));
 
-        HashMap<String, Float> finalCov = expectedUtilities;
-
         float covSum = 0;
-        for (Map.Entry<String,Float> co: finalCov.entrySet()){
+        for (Map.Entry<String,Float> co: expectedUtilities.entrySet()){
             covSum += co.getValue();
         }
         float finalCovSum = covSum;
 
-        selfPossibility.replaceAll((k , v) -> (float) Math.round((selfPossibility.get(k) + finalCov.get(k)) / (1 + finalCovSum) * 1000) / 1000);
+        selfPossibility.replaceAll((k , v) ->
+                (float) Math.round((selfPossibility.get(k) + expectedUtilities.get(k)) / (1 + finalCovSum) * 1000) / 1000);
     }
 
-
+    /**
+     * possibility of this agent choosing a value
+     * @return
+     */
+    @Override
     public HashMap<String, Float> getPossibility(){
         return selfPossibility;
     }
 
+    /**
+     * get the probability distribution over values
+     * @return distribution
+     */
+    @Override
     public HashMap<String, Float> getDistribution(){
         return this.selfPossibility;
     }
 
+    /**
+     * demote a value
+     * @param self demoted value of the agent
+     * @param other value of other agent demoting the agent's value
+     * @param strength degree of reduction to the demoted value
+     */
     @Override
-    public void demote(String self, String other, float strengh) {
-        matric.demote(self,other,strengh);
+    public void demote(String self, String other, float strength) {
+        matrix.demote(self,other, strength);
     }
 
-    @Override
-    public void promote(String self) {
-        matric.promote(self);
+    public void print(){
+        matrix.print();
     }
 
 }

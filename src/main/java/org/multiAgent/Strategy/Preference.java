@@ -33,7 +33,8 @@ public class Preference {
      * @param messager the logger which keeping rocording the dialogue
      * @return  selected move
      */
-    public Move pickStrategy(HashSet<Move>[] availableMoves, ArrayList<Argument> agreeable, ArrayList<Argument> argumentsOfAgreeable, Model model, Messager messager){
+    public Move pickStrategy(HashSet<Move>[] availableMoves, ArrayList<Argument> agreeable, ArrayList<Argument>
+            argumentsOfAgreeable, Model model, Messager messager){
         HashMap<String, Float> Model = model.getDistribution();
         // available agree move
         ArrayList<Move> legalAgreeMove = new ArrayList<>();
@@ -57,7 +58,8 @@ public class Preference {
         ArrayList<Move> legalAttackAssertMove = new ArrayList<>();
         for (Move move : availableMoves[0]){
             Argument currentArgument = (Argument) move.getContent();
-            if(!argumentsOfAgreeable.contains(currentArgument) && messager.checkMessageExistence(MoveType.ASSERT, currentArgument.getAct(), Sign.POSITIVE) && currentArgument.getSign() == Sign.NEGATIVE){
+            if(!argumentsOfAgreeable.contains(currentArgument) && messager.checkMessageExistence(MoveType.ASSERT,
+                    currentArgument.getAct(), Sign.POSITIVE) && currentArgument.getSign() == Sign.NEGATIVE){
                 legalAttackAssertMove.add(move);
             }
         }

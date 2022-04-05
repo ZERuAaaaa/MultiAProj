@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MatricTest {
+public class MatrixTest {
     static HashMap<String,Float> self = new HashMap();
     static HashMap<String,Float> other = new HashMap();
     @BeforeClass
@@ -22,26 +22,26 @@ public class MatricTest {
         other.put("M", (float)4);
     }
 
-    Matric matric = new Matric(self, other);
+    Matrix matrix = new Matrix(self, other);
 
 
     @Test
     public void print() {
-        matric.print();
+        matrix.print();
     }
 
     @Test
     public void demote(){
-        matric.demote("C", "D", 1);
-        matric.print();
+        matrix.demote("C", "D", 1);
+        matrix.print();
     }
 
     @Test
     public void get(){
-        for (Map.Entry<String, float[]> entry: matric.getX("C").entrySet()){
+        for (Map.Entry<String, float[]> entry: matrix.getX("C").entrySet()){
             System.out.println(entry.getValue()[0] + " " + entry.getValue()[1]);
         }
-        for (Map.Entry<String, float[]> entry: matric.getY("D").entrySet()){
+        for (Map.Entry<String, float[]> entry: matrix.getY("D").entrySet()){
             System.out.println(entry.getValue()[0] + " " + entry.getValue()[1]);
         }
     }

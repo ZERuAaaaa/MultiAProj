@@ -6,12 +6,13 @@ import org.multiAgent.Agent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ModestyModel implements Model{
     ArrayList<Agent> agents;
     HashMap<Agent, HashMap<String, Integer>> audiences;
 
-    Matric matric ;
+    public Matrix matric ;
 
     HashMap<String, Float> selfPossibility = new HashMap<>();
     HashMap<String, Float> dialoguePossibility = new HashMap<>();
@@ -44,7 +45,7 @@ public class ModestyModel implements Model{
 
         dialoguePayoff.replaceAll((k, v) -> v / (agents.size() - 1));
 
-        matric = new Matric(selfPayoff, dialoguePayoff);
+        matric = new Matrix(selfPayoff, dialoguePayoff);
         for (Map.Entry<String, Float> entry: selfPayoff.entrySet()){
             selfPossibility.put(entry.getKey(),  (float) 1 / selfPayoff.size());
         }
@@ -80,13 +81,12 @@ public class ModestyModel implements Model{
     }
 
     @Override
-    public void demote(String self, String other, float strengh) {
-        matric.demote(self,other,strengh);
+    public void demote(String self, String other, float strength) {
+        matric.demote(self,other, strength);
     }
 
-    @Override
-    public void promote(String self) {
-        matric.promote(self);
+    public void print(){
+        matric.print();
     }
 
 }

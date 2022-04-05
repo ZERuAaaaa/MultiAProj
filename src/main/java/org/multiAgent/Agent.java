@@ -44,13 +44,27 @@ public class Agent {
         this.audiences = audiences;
         this.arguments = arguments;
     }
+
+    /**
+     * default constructor of agent with default model: Nash dynamic
+     * @param audiences audience of the agent
+     * @param arguments arguments of the agent
+     */
+    public Agent(HashMap<String, Integer> audiences, ArrayList<Argument> arguments){
+        this.model = new NashDynamicModel();
+        this.AgentId = AgentCounter++;
+        this.audiences = audiences;
+        this.arguments = arguments;
+    }
+
     /**
      * when dialogue is open, generate set of all arguments construct from S under the Goal,
      * and generate IVAF of a single agent
      * @param topic topic select by the dialogue
      * @param dialogueInfo dialogue information to initialize the model
      */
-    public void initializeByTopic(String topic, Pair<ArrayList<Agent>, HashMap<Agent, HashMap<String, Integer>>> dialogueInfo){
+    public void initializeByTopic(String topic, Pair<ArrayList<Agent>, HashMap<Agent,
+            HashMap<String, Integer>>> dialogueInfo){
         model.initialize(dialogueInfo, this);
         arguments = arguments.stream()
                 .filter(argument -> argument.getGoal().equals(topic))
@@ -59,13 +73,15 @@ public class Agent {
         dvaf = new IVAF(arguments, audiences);
     }
 
+    /**
+     * get arguments hold by the agent
+     * @return arguments.
+     */
     public ArrayList<Argument> getArguments(){
         return arguments;
     }
 
-    public HashMap<String, Integer> getAudience(){
-        return audiences;
-    }
+
     /**
      * the dialogue trigger the agent to act each round during the deliberation
      * @param messager a messager record all logs during the deliberation
@@ -76,7 +92,7 @@ public class Agent {
         if (demoteList.isEmpty()){
 
         }else if(demoteList.get(0).length == 1){
-            model.promote((String) demoteList.get(0)[0]);
+            //model.promote((String) demoteList.get(0)[0]);
         }else{
             for (Object[] obj : demoteList) {
                 model.demote((String) obj[0], (String) obj[1],(float) obj[2]);
@@ -154,11 +170,18 @@ public class Agent {
         }
         return agreeable;
     }
-
+    /**
+     * get audiences hold by the agent
+     * @return audiences.
+     */
     public HashMap<String, Integer> getAudiences(){
         return audiences;
     }
 
+    /**
+     * return all agreeable action of an agent at specific state
+     * @return
+     */
     public HashSet<String> getAgreeableAction(){
         ArrayList<Argument> agreeable = getAgreeable();
         HashSet<String> agreeableAction = new HashSet<>();
@@ -206,5 +229,9 @@ public class Agent {
         dvaf = null;
         audiences.clear();
         arguments.clear();
+    }
+
+    public String toString(){
+        return "Agent" + getAgentId();
     }
 }

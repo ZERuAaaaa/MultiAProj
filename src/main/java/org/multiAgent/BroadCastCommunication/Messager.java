@@ -7,15 +7,29 @@ import org.multiAgent.IVAFramework.Sign;
 
 import java.util.*;
 
+/**
+ * The messager is a dialogue tool, the messager could broadcast the move of agents and
+ * keep recording moves of agents by maintaining a log. And provide method to perform
+ * several form of check for agent.
+ */
 public class Messager {
 
     ArrayList<Move> messageLog = new ArrayList<>();
 
+    /**
+     * default constructor
+     */
     public Messager(){
 
     }
 
-    public <T> void broadCast(Move move, Agent agent, ArrayList<Agent> agents){
+    /**
+     * broadcast the move of an agent and record the move
+     * @param move move
+     * @param agent agent who required a broadcast
+     * @param agents who broadcast move to
+    */
+    public void broadCast(Move move, Agent agent, ArrayList<Agent> agents){
         if(move.getType() == MoveType.ASSERT){
             for(Agent age: agents){
                 if(age != agent){
@@ -26,24 +40,44 @@ public class Messager {
         addMessage(move);
     }
 
+    /**
+     * print the dialogue log
+     */
     public void printLog(){
         for(int i = 0; i < messageLog.size(); i++){
             System.out.println(i + ":" + messageLog.get(i).toString());
         }
     }
 
+    /**
+     * add new message to the log
+     * @param move new move
+     */
     public void addMessage(Move move){
         messageLog.add(move);
     }
 
+    /**
+     * get the move of current state of the dialogue
+     * @return move
+     */
     public Move getLastOne(){
         return messageLog.get(messageLog.size() - 1);
     }
 
+    /**
+     * print the new move
+     */
     public void printLastOne(){
         System.out.println(messageLog.get(messageLog.size() - 1));
     }
 
+    /**
+     * check whether such a move exists in the log.
+     * @param type type of move
+     * @param argument specific argument
+     * @return boolean
+     */
     public boolean checkMessageExistence(MoveType type, Argument argument){
 
         boolean exist = false;
@@ -56,13 +90,21 @@ public class Messager {
         return exist;
     }
 
+    /**
+     * check whether such a move exists in the log.
+     * @param type type of move
+     * @param action specific argument
+     * @param sign the sign of the argument
+     * @return boolean
+     */
     public boolean checkMessageExistence(MoveType type, String action, Sign sign){
         boolean exist = false;
 
         for (Move move: messageLog){
             if(move.getType() == MoveType.ASSERT){
                 Argument currentArgument = ((Argument) move.getContent());
-                if(move.getType() == type && currentArgument.getAct().equals(action) && currentArgument.getSign() == sign){
+                if(move.getType() == type && currentArgument.getAct().equals(action) &&
+                        currentArgument.getSign() == sign){
                     exist = true;
                     break;
                 }
@@ -71,6 +113,11 @@ public class Messager {
         return exist;
     }
 
+    /**
+     * check whether the dialogue could close according to the log, and return
+     * the type of close of the dialogue.
+     * @return type of close
+     */
     public Integer checkClose(){
         int threshold = Agent.AgentCounter;
         if(messageLog.size() < threshold){
@@ -105,6 +152,12 @@ public class Messager {
         return 0;
     }
 
+    /**
+     * check whether the agent could agree to the action
+     * @param action action
+     * @param agent agent
+     * @return boolean
+     */
     public boolean checkAgreed(String action, Agent agent){
         boolean canAgree = false;
         Move lastOne = getLastOne();
@@ -140,6 +193,13 @@ public class Messager {
         return canAgree;
     }
 
+    /**
+     * check whether there are some arguments that demote a value, agents will demote the
+     * value associate to the argument within their model.
+     * @param agent agent
+     * @param Magnification to what degree the agent would demote the value
+     * @return set of demote information
+     */
     public ArrayList<Object[]> checkDemote(Agent agent, float Magnification){
         boolean demote = false;
         ArrayList<Object[]> temp = new ArrayList<>();
@@ -155,7 +215,8 @@ public class Messager {
                         Move currentMove = messageLog.get(i);
                         if (currentMove.getSender() != agent && currentMove.getType() == MoveType.ASSERT){
                             Argument currentArgument = (Argument) currentMove.getContent();
-                            if (currentArgument.getSign() == Sign.NEGATIVE && currentArgument.getAct().equals(pre.getAct())){
+                            if (currentArgument.getSign() == Sign.NEGATIVE &&
+                                    currentArgument.getAct().equals(pre.getAct())){
                                 demote = true;
                                 HashMap<String, Integer> audience = currentMove.getSender().getAudiences();
                                 Object[] demotes = new Object[3];
