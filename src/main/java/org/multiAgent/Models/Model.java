@@ -17,6 +17,5 @@ public interface Model {
     HashMap<String, Float> getDistribution();
     void demote(String self, String other, float strength);
     void print();
-
-
+    Matrix getMatrix();
 }

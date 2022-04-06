@@ -398,4 +398,11 @@ public class IVAF {
         return new Pair(arguments, relationship);
     }
 
+    public ArrayList<Argument> getArguments(){
+        return arguments;
+    }
+
+    public HashMap<String,Integer> getAudience() {
+        return audiences;
+    }
 }

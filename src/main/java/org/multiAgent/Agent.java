@@ -89,6 +89,8 @@ public class Agent {
      */
     public Move Act(Messager messager){
         ArrayList<Object[]> demoteList = messager.checkDemote(this, 0.5F);
+
+
         if (demoteList.isEmpty()){
 
         }else if(demoteList.get(0).length == 1){
@@ -180,7 +182,7 @@ public class Agent {
 
     /**
      * return all agreeable action of an agent at specific state
-     * @return
+     * @return agreeable actions
      */
     public HashSet<String> getAgreeableAction(){
         ArrayList<Argument> agreeable = getAgreeable();
@@ -216,7 +218,7 @@ public class Agent {
 
     /**
      * get the agent's dialogue ivaf
-     * @return
+     * @return dvaf
      */
     public IVAF getDvaf(){
         return dvaf;

@@ -44,5 +44,7 @@ public class RandomModel implements Model{
         matrix.print();
     }
 
-
+    public Matrix getMatrix(){
+        return matrix;
+    }
 }

@@ -11,8 +11,9 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class SocialWelfareModelTest {
-    static Model socialWelfare = new SocialWelfareModel();
+public class RandomModelTest {
+
+    static Model Random = new RandomModel();
     static Agent agent1;
     static Agent agent2;
     static ArrayList<Agent> agentlist;
@@ -51,8 +52,8 @@ public class SocialWelfareModelTest {
         ArrayList<Argument> arguments2 = new ArrayList<>();
         arguments2.add(argument5);
         arguments2.add(argument6);
-        agent1 = new Agent(audience1, arguments1, socialWelfare);
-        agent2 = new Agent(audience2, arguments2, new SocialWelfareModel());
+        agent1 = new Agent(audience1, arguments1, Random);
+        agent2 = new Agent(audience2, arguments2, new NashDynamicModel());
         agentlist = new ArrayList<>();
         agentlist.add(agent1);
         agentlist.add(agent2);
@@ -84,27 +85,26 @@ public class SocialWelfareModelTest {
         audience2F.put("D", 2F);
         audience2F.put("V", 3F);
         audience2F.put("M", 4F);
+
         map2.put(agent1, audience1F);
         map2.put(agent2, audience2F);
-
     }
     @Test
     public void initialize() {
-        socialWelfare.initialize(new Pair<>(agentlist,map1), agent1);
-        assertEquals(socialWelfare.getMatrix().getMatric().size(), 4);
+        Random.initialize(new Pair<>(agentlist,map1), agent1);
+        assertNull(Random.getMatrix());
     }
 
     @Test
     public void update() {
-        socialWelfare.initialize(new Pair<>(agentlist,map1), agent1);
-        socialWelfare.update(map2);
+        Random.initialize(new Pair<>(agentlist,map1), agent1);
+        Random.update(map2);
         HashMap<String,Float> map = new HashMap<>();
         map.put("C",0.325F);
         map.put("D",0.275F);
         map.put("V",0.225F);
         map.put("M",0.175F);
-        assertEquals(map,socialWelfare.getDistribution());
+        assertNotNull(Random.getDistribution());
     }
-
 
 }

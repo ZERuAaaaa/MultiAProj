@@ -89,4 +89,8 @@ public class ModestyModel implements Model{
         matric.print();
     }
 
+    public Matrix getMatrix(){
+        return matric;
+    }
+
 }

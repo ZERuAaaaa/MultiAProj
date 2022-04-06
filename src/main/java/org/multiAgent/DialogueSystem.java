@@ -27,10 +27,10 @@ public class DialogueSystem{
      * reset the dialogue
      */
     public void reset(){
-        topic = null;
-        messager = new Messager();
-        agents.clear();
-        counter = 0;
+        DialogueSystem.topic = null;
+        DialogueSystem.messager = new Messager();
+        DialogueSystem.agents.clear();
+        DialogueSystem.counter = 0;
         Agent.AgentCounter = 0;
     }
 
@@ -245,6 +245,11 @@ public class DialogueSystem{
                 if (!audiences.get(i).equals(audiences.get(e))){
                     same = false;
                 }
+            }
+        }
+        for (Agent age: agents){
+            if (age.getArguments().size() == 0){
+                throw new Exception("Each agents should hold at least one argument");
             }
         }
         if (!same){

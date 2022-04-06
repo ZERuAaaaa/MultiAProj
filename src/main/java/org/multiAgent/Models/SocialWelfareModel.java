@@ -108,4 +108,8 @@ public class SocialWelfareModel implements Model{
         matrix.print();
     }
 
+    public Matrix getMatrix(){
+        return matrix;
+    }
+
 }

@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class Messager {
 
-    ArrayList<Move> messageLog = new ArrayList<>();
+    public ArrayList<Move> messageLog = new ArrayList<>();
 
     /**
      * default constructor
@@ -82,7 +82,7 @@ public class Messager {
 
         boolean exist = false;
         for (Move move: messageLog){
-            if(move.getType() == type && move.getContent() == argument){
+            if(move.getType() == type && ((Argument) move.getContent()).equals(argument)){
                 exist = true;
                 break;
             }
@@ -208,6 +208,7 @@ public class Messager {
         }else{
             Integer position = messageLog.size()- Agent.AgentCounter;
             Move previous = messageLog.get(position);
+
             if (previous.getType() == MoveType.ASSERT){
                 Argument pre = (Argument) previous.getContent();
                 if (previous.getSender() == agent && pre.getSign() == Sign.POSITIVE){

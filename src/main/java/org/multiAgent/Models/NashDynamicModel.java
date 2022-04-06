@@ -152,4 +152,8 @@ public class NashDynamicModel implements Model{
         matrix.print();
     }
 
+    public Matrix getMatrix(){
+        return matrix;
+    }
+
 }

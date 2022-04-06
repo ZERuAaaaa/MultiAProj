@@ -29,10 +29,13 @@ public class CsvTool {
      * load dialogue information from csv file
      * @param url path to the file
      * @return dialogue information
-     * @throws Exception
+     * @throws Exception exception
      */
     public Pair<Pair<ArrayList<ArrayList<Argument>>, ArrayList<HashMap<String,Integer>>>,
             ArrayList<Model>> loadForCsv(String url) throws Exception{
+        if (url.equals("") || url == null){
+            throw new Exception("url cannot be empty");
+        }
         ArrayList<HashMap<String, Integer>> maps = new ArrayList<>();
         ArrayList<ArrayList<Argument>> AgentArguemnts = new ArrayList<>();
         ArrayList<Model> models = new ArrayList<>();
@@ -72,7 +75,6 @@ public class CsvTool {
                 AgentArguemnts.add(arguments);
             }
         }catch (Exception e){
-            e.printStackTrace();
             throw new Exception("please check the format of input csv file");
         }
         return new Pair<>(new Pair<>(AgentArguemnts,maps), models);

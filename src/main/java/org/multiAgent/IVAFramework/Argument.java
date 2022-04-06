@@ -69,4 +69,8 @@ public class Argument {
         return audience;
     }
 
+    public boolean equals(Argument arg){
+        return this.action.equals(arg.getAct()) && this.sign == arg.getSign() && this.audience.equals(arg.getAudience()) && this.goal.equals(arg.getGoal());
+    }
+
 }

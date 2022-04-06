@@ -11,8 +11,9 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class SocialWelfareModelTest {
-    static Model socialWelfare = new SocialWelfareModel();
+public class NashDynamicModelTest {
+
+    static Model nash = new NashDynamicModel();
     static Agent agent1;
     static Agent agent2;
     static ArrayList<Agent> agentlist;
@@ -51,8 +52,8 @@ public class SocialWelfareModelTest {
         ArrayList<Argument> arguments2 = new ArrayList<>();
         arguments2.add(argument5);
         arguments2.add(argument6);
-        agent1 = new Agent(audience1, arguments1, socialWelfare);
-        agent2 = new Agent(audience2, arguments2, new SocialWelfareModel());
+        agent1 = new Agent(audience1, arguments1, nash);
+        agent2 = new Agent(audience2, arguments2, new NashDynamicModel());
         agentlist = new ArrayList<>();
         agentlist.add(agent1);
         agentlist.add(agent2);
@@ -90,21 +91,20 @@ public class SocialWelfareModelTest {
     }
     @Test
     public void initialize() {
-        socialWelfare.initialize(new Pair<>(agentlist,map1), agent1);
-        assertEquals(socialWelfare.getMatrix().getMatric().size(), 4);
+        nash.initialize(new Pair<>(agentlist,map1), agent1);
+        assertEquals(nash.getMatrix().getMatric().size(), 4);
     }
 
     @Test
     public void update() {
-        socialWelfare.initialize(new Pair<>(agentlist,map1), agent1);
-        socialWelfare.update(map2);
+        nash.initialize(new Pair<>(agentlist,map1), agent1);
+        nash.update(map2);
         HashMap<String,Float> map = new HashMap<>();
-        map.put("C",0.325F);
-        map.put("D",0.275F);
-        map.put("V",0.225F);
-        map.put("M",0.175F);
-        assertEquals(map,socialWelfare.getDistribution());
+        map.put("C",0.399F);
+        map.put("D",0.3F);
+        map.put("V",0.2F);
+        map.put("M",0.101F);
+        assertEquals(map,nash.getDistribution());
     }
-
 
 }

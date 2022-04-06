@@ -26,23 +26,11 @@ public class MatrixTest {
 
 
     @Test
-    public void print() {
-        matrix.print();
-    }
-
-    @Test
     public void demote(){
         matrix.demote("C", "D", 1);
-        matrix.print();
+
+        assertEquals(3F, matrix.getMatric().get("C").get("D")[0],0);
+        assertEquals(1F, matrix.getMatric().get("C").get("D")[1],0);
     }
 
-    @Test
-    public void get(){
-        for (Map.Entry<String, float[]> entry: matrix.getX("C").entrySet()){
-            System.out.println(entry.getValue()[0] + " " + entry.getValue()[1]);
-        }
-        for (Map.Entry<String, float[]> entry: matrix.getY("D").entrySet()){
-            System.out.println(entry.getValue()[0] + " " + entry.getValue()[1]);
-        }
-    }
 }

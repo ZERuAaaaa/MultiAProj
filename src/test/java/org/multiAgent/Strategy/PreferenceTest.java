@@ -1,21 +1,21 @@
-package org.multiAgent;
+package org.multiAgent.Strategy;
 
-import javafx.collections.FXCollections;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.multiAgent.Agent;
 import org.multiAgent.BroadCastCommunication.Move;
 import org.multiAgent.BroadCastCommunication.MoveType;
+import org.multiAgent.DialogueSystem;
 import org.multiAgent.IVAFramework.Argument;
+import org.multiAgent.Models.Model;
 import org.multiAgent.Models.NashDynamicModel;
-import org.testng.annotations.BeforeTest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-
-public class AgentTest {
+public class PreferenceTest {
 
     private static DialogueSystem dialogue;
     private static HashMap<String,Integer> audience1;
@@ -62,42 +62,35 @@ public class AgentTest {
         dialogue.addAgent(audience2, arguments2, new NashDynamicModel());
 
     }
-    @Test
-    public void initializeByTopic() {
-        Agent testAgent = DialogueSystem.agents.get(0);
-        testAgent.initializeByTopic("go out", dialogue.getDialogueInfo());
-        assertEquals(testAgent.getDvaf().getArguments().size(),2);
-    }
 
     @Test
-    public void getAgreeable() {
-        Agent testAgent = DialogueSystem.agents.get(0);
-        testAgent.initializeByTopic("go out", dialogue.getDialogueInfo());
-        ArrayList<Argument> agreeableArgs = new ArrayList<Argument>();
-        agreeableArgs.add(new Argument("restaurant", "go out", "+","C"));
-        assertTrue(agreeableArgs.get(0).equals(testAgent.getAgreeable().get(0)));
-    }
-
-    @Test
-    public void getDvaf(){
-        Agent testAgent = DialogueSystem.agents.get(0);
-        testAgent.initializeByTopic("go out", dialogue.getDialogueInfo());
-        assertEquals(testAgent.getDvaf().getArguments().size(),2);
-        assertEquals(testAgent.getDvaf().getAudience(),audience1);
-    }
-
-    @Test
-    public void protocol() {
+    public void pickStrategy() {
         Agent agent1 = DialogueSystem.agents.get(0);
         Agent agent2 = DialogueSystem.agents.get(1);
+        agent1.initializeByTopic("go out", dialogue.getDialogueInfo());
         DialogueSystem.messager.messageLog.clear();
         DialogueSystem.messager.messageLog.add(new Move(agent2, MoveType.OPEN, "go out"));
-        DialogueSystem.messager.messageLog.add(new Move(agent1, MoveType.ASSERT, new Argument("restaurant","go out", "+", "C")));
+        DialogueSystem.messager.messageLog.add(new Move(agent1, MoveType.ASSERT, new Argument("picnic","go out", "+", "C")));
         DialogueSystem.messager.messageLog.add(new Move(agent2, MoveType.ASSERT, new Argument("restaurant","go out", "-", "D")));
-        Agent testAgent = DialogueSystem.agents.get(0);
-        testAgent.initializeByTopic("go out", dialogue.getDialogueInfo());
-        assertEquals(1,testAgent.protocol(DialogueSystem.messager)[0].size());
-        assertEquals(0,testAgent.protocol(DialogueSystem.messager)[1].size());
-        assertEquals(1,testAgent.protocol(DialogueSystem.messager)[2].size());
+        assertEquals(agent1.Act(DialogueSystem.messager).getType(), MoveType.ASSERT);
+        assertTrue(((Argument) agent1.Act(DialogueSystem.messager).getContent()).equals(new Argument("restaurant","go out","+","C")));
+    }
+
+    @Test
+    public void selectBest() {
+        Preference pre = new Preference();
+        Agent agent1 = DialogueSystem.agents.get(0);
+        Agent agent2 = DialogueSystem.agents.get(1);
+        ArrayList<Move> moves = new ArrayList<>();
+        moves.add(new Move(agent1,MoveType.ASSERT, new Argument("picnic", "go out", "+","C")));
+        moves.add(new Move(agent1,MoveType.ASSERT, new Argument("picnic", "go out", "+","D")));
+        moves.add(new Move(agent1,MoveType.ASSERT, new Argument("picnic", "go out", "+","V")));
+        moves.add(new Move(agent1,MoveType.ASSERT, new Argument("picnic", "go out", "+","M")));
+        HashMap<String,Float> model = new HashMap<>();
+        model.put("C",0.25F);
+        model.put("D",0.17F);
+        model.put("V",0.16F);
+        model.put("M",0.42F);
+        assertEquals(((Argument)pre.selectBest(moves,model).getContent()).getAudience(),"M");
     }
 }
