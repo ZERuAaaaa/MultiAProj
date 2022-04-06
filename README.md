@@ -51,4 +51,5 @@ mvn install
 to download all dependencies, run through test cases and compile the program.
 ## Structure of CSV file
 Here show the structure of csv file, csv file constructed data with format below could be input to the dialogue system to run:
+
 ![exampleCsvFile](https://user-images.githubusercontent.com/59595500/162023565-caa222e8-b896-494a-a92a-0ff72fb34874.png)
