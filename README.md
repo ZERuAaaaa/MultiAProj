@@ -98,3 +98,9 @@ mvn exec:java -Dexec.mainClass=org.multiAgent.%PACKAGE_TO_MAIN_CLASS%
 Here show the structure of csv file, csv file constructed data with format below could be input to the dialogue system to run:
 
 ![exampleCsvFile](https://user-images.githubusercontent.com/59595500/162023565-caa222e8-b896-494a-a92a-0ff72fb34874.png)
+
+## Output file structure
+Output csv file is of the structure:
+```
+["round","agentNumber","agent's current arguments","agent's audience","agent's move"]
+```
