@@ -22,6 +22,9 @@
       <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:win:17.0.2" />
       <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.32" />
       <element id="library" level="project" name="Maven: org.testng:testng:7.5" />
+      <element id="library" level="project" name="Maven: com.opencsv:opencsv:5.3" />
+      <element id="library" level="project" name="Maven: com.beust:jcommander:1.78" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:win:17.0.0.1" />
     </root>
   </artifact>
 </component>

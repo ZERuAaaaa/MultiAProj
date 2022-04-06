@@ -1,7 +1,7 @@
 package org.multiAgent;
 
-import com.opencsv.CSVReader;
-import com.opencsv.CSVWriter;
+
+
 import javafx.util.Pair;
 import org.multiAgent.IVAFramework.Argument;
 import org.multiAgent.Models.Model;
@@ -9,10 +9,8 @@ import org.multiAgent.Models.NashDynamicModel;
 import org.multiAgent.Models.RandomModel;
 import org.multiAgent.Models.SocialWelfareModel;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,6 +18,7 @@ import java.util.HashMap;
  * A csv tool could load dialogue information from csv file or write dialogue information into csv file
  */
 public class CsvTool {
+
     /**
      * default constructor
      */
@@ -40,19 +39,18 @@ public class CsvTool {
         ArrayList<ArrayList<Argument>> AgentArguemnts = new ArrayList<>();
         ArrayList<Model> models = new ArrayList<>();
         try{
-            CSVReader reader = new CSVReader(new FileReader(url));
-            String[] initial = reader.readNext();
+            BufferedReader reader = new BufferedReader(new FileReader(url));
+            String[] initial = nextLine(reader);
             int numberOfAgent = Integer.parseInt(initial[0]);
             int numberOfAudience = Integer.parseInt(initial[1]);
-
             for (int i = 0; i < numberOfAgent; i++){
                 HashMap<String,Integer> audience = new HashMap<>();
                 for (int a = 0; a < numberOfAudience; a++){
-                    String[] current = reader.readNext();
+                    String[] current = nextLine(reader);
                     audience.put(current[0], Integer.parseInt(current[1]));
                 }
                 maps.add(audience);
-                String[] agentInfo = reader.readNext();
+                String[] agentInfo = nextLine(reader);
                 int numberOfArgument = Integer.parseInt(agentInfo[0]);
                 switch(agentInfo[1]){
                     case("Nash Dynamic"):  models.add(new NashDynamicModel()); break;
@@ -64,7 +62,7 @@ public class CsvTool {
 
                 ArrayList<Argument> arguments = new ArrayList<>();
                 for (int e= 0; e < numberOfArgument;e++){
-                    String[] current = reader.readNext();
+                    String[] current = nextLine(reader);
                     String action = current[0];
                     String goal = current[1];
                     String value = current[2];
@@ -75,37 +73,53 @@ public class CsvTool {
                 AgentArguemnts.add(arguments);
             }
         }catch (Exception e){
+            e.printStackTrace();
             throw new Exception("please check the format of input csv file");
+
         }
         return new Pair<>(new Pair<>(AgentArguemnts,maps), models);
     }
 
-    public static void write(String output, String resultUrl) {
+    public static void write(String output, String resultUrl) throws IOException {
         File file = new File(resultUrl);
+        if (!file.exists()){
+            file.createNewFile();
+        }
         try {
             FileWriter outputfile = new FileWriter(file);
-
-            CSVWriter writer = new CSVWriter(outputfile);
-            String[] write = {output};
-            writer.writeNext(write);
+            BufferedWriter writer = new BufferedWriter(outputfile);
+            writer.write(output);
+            writer.flush();
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void write(ArrayList<String[]> log, String resultUrl) {
+    public static void write(ArrayList<String[]> log, String resultUrl) throws IOException {
         File file = new File(resultUrl);
+        if (!file.exists()){
+            file.createNewFile();
+        }
         try {
             FileWriter outputfile = new FileWriter(file);
 
-            CSVWriter writer = new CSVWriter(outputfile);
+            BufferedWriter writer = new BufferedWriter(outputfile);
             for (String[] current: log){
-                writer.writeNext(current);
+                for (String e: current){
+                    writer.append(e);
+                    writer.append(",");
+                }
+                writer.append("\n");
             }
+            writer.flush();
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String[] nextLine(BufferedReader reader) throws IOException {
+        return reader.readLine().split(",");
     }
 }
