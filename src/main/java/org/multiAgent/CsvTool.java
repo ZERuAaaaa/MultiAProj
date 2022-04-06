@@ -73,7 +73,6 @@ public class CsvTool {
                 AgentArguemnts.add(arguments);
             }
         }catch (Exception e){
-            e.printStackTrace();
             throw new Exception("please check the format of input csv file");
 
         }
