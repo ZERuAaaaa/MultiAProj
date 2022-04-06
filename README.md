@@ -34,6 +34,7 @@ Examples of how to construct and run the system are provided in:
 ### 2, running directly from jar file:
 Donwload the jar file from the project ```Jar/Dialogue_System.jar```
 Use command below to run a dialogue and save dialogue result and dialogue log in seperate csv files.
+An example csv file is in path: ```src/main/java/org/multiAgent/example/exampleCsvFile.csv```
 
 ```
 java -cp %PATH_TO_Dialogue_system.jar% org.multiAgent.dialogueFromCsv [path to input csv file] [the goal of the dialogue]
