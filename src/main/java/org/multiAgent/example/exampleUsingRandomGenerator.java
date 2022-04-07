@@ -1,7 +1,10 @@
 package org.multiAgent.example;
 
+import org.multiAgent.BroadCastCommunication.Move;
 import org.multiAgent.DialogueSystem;
 import org.multiAgent.RandomGenerator;
+
+import java.util.ArrayList;
 
 public class exampleUsingRandomGenerator {
 
@@ -14,6 +17,9 @@ public class exampleUsingRandomGenerator {
         dialogue.initialize(rand.generate(2,10,10,200, "Nash Dynamic"));
         // run the dialogue with the random goal
         dialogue.runAndDisplay(rand.getTopic());
+        // get log
+        ArrayList<Move> log = dialogue.getLog();
+        // reset the dialogue
         dialogue.reset();
     }
 }

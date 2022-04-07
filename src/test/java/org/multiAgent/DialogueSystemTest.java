@@ -99,7 +99,7 @@ public class DialogueSystemTest {
 
         dialogue.run("go out");
 
-
+        dialogue.reset();
 
     }
 
@@ -133,6 +133,7 @@ public class DialogueSystemTest {
         dialogue.addAgent(audience1, arguments1, new NashDynamicModel());
 
         dialogue.run("go out");
+        dialogue.reset();
 
     }
 
@@ -180,6 +181,7 @@ public class DialogueSystemTest {
         dialogue.addAgent(audience2, arguments2, new NashDynamicModel());
         // run the dialogue
         dialogue.runAndSave("go out", "src/test/java/org/multiAgent/testCsv/1.csv", "src/test/java/org/multiAgent/testCsv/2.csv");
+        dialogue.reset();
     }
 
     @Test(expected = java.lang.Exception.class)
@@ -193,6 +195,7 @@ public class DialogueSystemTest {
         dialogue.initialize(tool.loadForCsv("src/test/java/org/multiAgent/testCsv/1.csv"));
         // run the dialogue
         dialogue.runAndSave("go out", "src/test/java/org/multiAgent/testCsv/1.csv", "src/test/java/org/multiAgent/testCsv/2.csv");
+        dialogue.reset();
     }
 
     @Test(expected = java.lang.Exception.class)
@@ -206,6 +209,7 @@ public class DialogueSystemTest {
         dialogue.initialize(tool.loadForCsv(null));
         // run the dialogue
         dialogue.runAndSave("go out", "src/test/java/org/multiAgent/testCsv/1.csv", "src/test/java/org/multiAgent/testCsv/2.csv");
+        dialogue.reset();
     }
 
 

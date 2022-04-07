@@ -106,7 +106,6 @@ public class DialogueSystem{
         }else{
             output = "fail";
         }
-        reset();
         return output;
     }
 
@@ -147,7 +146,6 @@ public class DialogueSystem{
 
         }
         messager.printLog();
-        reset();
         return close;
     }
 
@@ -166,7 +164,7 @@ public class DialogueSystem{
         messager.broadCast(new Move(lastAgent,MoveType.OPEN,topic), lastAgent, agents);
         ArrayList<String[]> log = new ArrayList<>();
         log.add(new String[]{"ROUND","AGENTS","AGENTS AGRUMENTS","AGENTS AUDIENCES","MOVE"});
-
+        counter++;
         log.add(new String[]{"0",lastAgent.toString(), "", "","", new Move(lastAgent,MoveType.OPEN,topic).toString()});
         // initialize the model and dvaf of each agent
         for (Agent age: agents){
@@ -212,7 +210,6 @@ public class DialogueSystem{
         if (logUrl != null){
             CsvTool.write(log,logUrl);
         }
-        reset();
         return close;
     }
     /**
@@ -268,5 +265,9 @@ public class DialogueSystem{
             list.put(age, age.getPossibility());
         }
         return list;
+    }
+
+    public ArrayList<Move> getLog() {
+        return messager.messageLog;
     }
 }

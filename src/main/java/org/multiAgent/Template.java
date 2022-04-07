@@ -1,5 +1,6 @@
 package org.multiAgent;
 
+import org.multiAgent.BroadCastCommunication.Move;
 import org.multiAgent.IVAFramework.Argument;
 import org.multiAgent.Models.NashDynamicModel;
 import java.util.ArrayList;
@@ -56,6 +57,9 @@ public class Template {
 
         // run the dialogue
         dialogue.runAndDisplay("go out");
+        // get log from dialogue
+        ArrayList<Move> log = dialogue.getLog();
+        // reset the dialogue system
         dialogue.reset();
     }
 }

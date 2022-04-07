@@ -1,7 +1,10 @@
 package org.multiAgent.example;
 
+import org.multiAgent.BroadCastCommunication.Move;
 import org.multiAgent.CsvTool;
 import org.multiAgent.DialogueSystem;
+
+import java.util.ArrayList;
 
 
 /**
@@ -18,7 +21,9 @@ public class exampleSavingLog {
         //run and save dialogue result and log to target csv file
         dialogue.runAndSave("go out","src/main/java/org/multiAgent/example/result.csv",
                 "src/main/java/org/multiAgent/example/log.csv");
-
+        // get log
+        ArrayList<Move> log = dialogue.getLog();
+        // reset the dialogue
         dialogue.reset();
     }
 }

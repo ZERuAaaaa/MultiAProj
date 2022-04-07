@@ -1,7 +1,10 @@
 package org.multiAgent.example;
 
+import org.multiAgent.BroadCastCommunication.Move;
 import org.multiAgent.CsvTool;
 import org.multiAgent.DialogueSystem;
+
+import java.util.ArrayList;
 
 /**
  * This example shows how initialize data from csv file , csvFileFormat.png show the format of constructing
@@ -19,6 +22,9 @@ public class exampleLoadingCsvFile {
         String result = dialogue.run("go out");
         // get result
         System.out.println(result);
+        // get log
+        ArrayList<Move> log = dialogue.getLog();
+        // reset the dialogue
         dialogue.reset();
     }
 }
