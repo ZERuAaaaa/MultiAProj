@@ -93,7 +93,7 @@ to download all dependencies, run through test cases and compile the program. Th
 ```
 mvn exec:java -Dexec.mainClass=org.multiAgent.%PACKAGE_TO_MAIN_CLASS%
 ```
-
+or run and test functionalities directly through an Ide.
 ## Structure of CSV file
 Here show the structure of csv file, csv file constructed data with format below could be input to the dialogue system to run:
 
