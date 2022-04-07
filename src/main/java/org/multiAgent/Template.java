@@ -56,5 +56,6 @@ public class Template {
 
         // run the dialogue
         dialogue.runAndDisplay("go out");
+        dialogue.reset();
     }
 }

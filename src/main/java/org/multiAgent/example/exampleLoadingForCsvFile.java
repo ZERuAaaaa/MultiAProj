@@ -19,5 +19,6 @@ public class exampleLoadingForCsvFile {
         String result = dialogue.run("go out");
         // get result
         System.out.println(result);
+        dialogue.reset();
     }
 }

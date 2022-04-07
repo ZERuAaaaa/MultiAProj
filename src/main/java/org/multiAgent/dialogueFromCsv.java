@@ -11,8 +11,8 @@ public class dialogueFromCsv {
 
             //run and save dialogue result and log to target csv file
             dialogue.runAndSave(args[1],args[2],args[3]);
+            dialogue.reset();
         }catch (Exception e){
-            e.printStackTrace();
             throw new Exception("variables are in format \"[url of inputting data] [dialogue goal] [url to save result] [url to save log]\"" +
                     "\n please ensure that you entered right url"+"]");
         }

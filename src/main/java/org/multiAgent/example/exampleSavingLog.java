@@ -1,5 +1,6 @@
 package org.multiAgent.example;
 
+import org.multiAgent.CsvTool;
 import org.multiAgent.DialogueSystem;
 import org.multiAgent.RandomGenerator;
 
@@ -9,17 +10,15 @@ import org.multiAgent.RandomGenerator;
 public class exampleSavingLog {
 
     public static  void main(String[] args) throws Exception {
-
+        CsvTool csvtool = new CsvTool();
         DialogueSystem dialogue = new DialogueSystem();
-        // generate dialogue data via random generator(number of agents, number of actions, number of values,
-        // number of arguments, model using within the dialogue)
-        RandomGenerator rand = new RandomGenerator();
-        dialogue.initialize(rand.generate(2,10,6,60, "Nash Dynamic"));
+        // load data from csv file
+        dialogue.initialize(csvtool.loadForCsv("src/main/java/org/multiAgent/example/exampleCsvFile.csv"));
 
         //run and save dialogue result and log to target csv file
-        dialogue.runAndSave(rand.getTopic(),"src/main/java/org/multiAgent/example/result.csv",
+        dialogue.runAndSave("go out","src/main/java/org/multiAgent/example/result.csv",
                 "src/main/java/org/multiAgent/example/log.csv");
 
-
+        dialogue.reset();
     }
 }

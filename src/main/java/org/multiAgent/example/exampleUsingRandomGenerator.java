@@ -11,8 +11,9 @@ public class exampleUsingRandomGenerator {
         // number of arguments, model using within the dialogue, model using within the dialogue)
         RandomGenerator rand = new RandomGenerator();
 
-        dialogue.initialize(rand.generate(2,10,6,100, "Nash Dynamic"));
-        // run the dialogue the random goal
+        dialogue.initialize(rand.generate(2,10,10,200, "Nash Dynamic"));
+        // run the dialogue with the random goal
         dialogue.runAndDisplay(rand.getTopic());
+        dialogue.reset();
     }
 }
