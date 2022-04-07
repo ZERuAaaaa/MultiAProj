@@ -7,7 +7,7 @@ import org.multiAgent.DialogueSystem;
  * This example shows how initialize data from csv file , csvFileFormat.png show the format of constructing
  * an input data csv file.
  */
-public class exampleLoadingForCsvFile {
+public class exampleLoadingCsvFile {
 
     public static void main(String[] args) throws Exception {
         // import csvtool to read data from csv

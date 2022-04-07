@@ -2,7 +2,7 @@ package org.multiAgent.example;
 
 import org.multiAgent.CsvTool;
 import org.multiAgent.DialogueSystem;
-import org.multiAgent.RandomGenerator;
+
 
 /**
  * This example show how to save dialogue result to csv file, and initialize dialogue via random generator.
