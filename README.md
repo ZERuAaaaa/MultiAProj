@@ -1,6 +1,9 @@
 # MultiAProj
 MultiAProj is a multi-agent dialogue system to solve multi-parties decision making problem. 
-Users could include this project as java library or run this program stand alone.
+Users could include this project as java library or run this program stand alone. 
+
+This system contains a multi-agent dialogue system in Java, 'Value-based Argumentation Framework' are used to represent agent's knowladge, the system is running under a pre-defined 'protocol' and performing under a selected 'strategy', the defualt agent using game theory method to perform dialogue and could be extended with other cstomised trategies.
+      
 
 ## environment setup:
 
